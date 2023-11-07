@@ -1,0 +1,102 @@
+Name	Age	Stage	Description	Sequencer	Variant cDNA	Variant Protein	Variant Genome		
+ Pearl Dixon	49	2	 Mucinous	HiSeq	c.303T>G	p.(Tyr101*)	g.41256277A>C		5
+ Betty Schmidt	40	3	 Mixed_type	HiSeq	c.314A>G	"p.(Tyr105Cys), p.Tyr105Cys"	g.41256266T>C		4
+ Connie Fields	48	1	 Tubular	HiSeq	c.321del	p.(Phe107Leufs*12)	g.41256259del		
+ Rosemarie Simpson	43	2	 Tubular	MiSeq	c.329dup	p.(Glu111Glyfs*3)	g.41256251dup		
+ Veronica Delgado	61	1	 Mixed_type	HiSeq	c.370A>G	p.Ile124Val	g.41256210T>C		
+ Melinda Roberts	37	3	 Invasive_lobular	HiSeq	c.380G>A	p.Ser127Asn	g.41256200C>T		
+ Annette Dawson	42	1	 Mixed_type	HiSeq	c.390C>G	p.(Tyr130*)	g.41256190G>C		
+ Brandi Reeves	69	1	 Invasive_lobular	HiSeq	c.396C>A	"p.(Asn132Lys), p.Asn132Lys"	g.41256184G>T		
+ Olive Johnson	35	1	 Medullary	MiSeq	c.593+8A>G	?	g.41249253T>C		
+ Eunice Potter	54	1	 Tubular	MiSeq	c.593+16C>G	p.(=)	g.41249245G>C		
+ Alison Higgins	31	1	 Invasive_ductal	HiSeq	c.593+25A>T	p.?	g.41249236T>A		
+ Myra Meyer	28	1	 Papillary	HiSeq	c.593+77T>C	p.?	g.41249184A>G		
+ Terri Hill	63	2	 Other	HiSeq	c.594-225G>A	p.(=)	g.41248164C>T		
+ Mandy Tyler	66	3	 Medullary	HiSeq	c.594-203_670+515del	p.?	g.41247348_41248142del		
+ Kayla Andrews	62	1	 Papillary	HiSeq	c.594-60 del	p.(=)	g.41247999del		
+ Kimberly Massey	30	3	 Mixed_type	HiSeq	c.594-34T>C	"p.?, p.(=)"	g.41247973A>G		
+ Kellie Pearson	56	1	 Mucinous	HiSeq	c.594-15G>C	NA	g.41247954C>G		
+ Dana Zimmerman	55	3	 Papillary	HiSeq	c.594-2A>C	"p.?, ?"	g.41247941T>G		
+ Teri Mann	41	2	 Invasive_lobular	MiSeq	c.594-2A>G	p.?	g.41247941T>C		
+ Emma Ramsey	34	2	 Other	MiSeq	c.594_597del	"p.(Ser198Argfs*35), p.?"	g.41247936_41247939del		
+ Vivian Hunt	58	1	 Medullary	MiSeq	c.595G>A	p.(Val199Met)	g.41247938C>T		
+ Myrtle Fletcher	59	3	 Invasive_ductal	HiSeq	c.612G>C	p.Leu204Phe	g.41247921C>G		
+ Eloise Black	39	2	 Papillary	HiSeq	c.616C>T	p.(Gln206*)	g.41247917G>A		
+ Holly Fernandez	25	3	 Medullary	HiSeq	c.637A>G	p.Arg213Gly	g.41247896T>C		
+ Doris Cole	27	3	 Invasive_lobular	MiSeq	c.639G>A	p.(=)	g.41247894C>T		
+ Genevieve Nguyen	47	1	 Mucinous	HiSeq	c.641A>G	p.(Asp214Gly)	g.41247892T>C		
+ Harriet Crawford	52	3	 Invasive_ductal	HiSeq	c.652T>C	p.(=)	g.41247881A>G		
+ Johanna Burke	65	1	 Mucinous	HiSeq	c.661G>T	p.Ala221Ser	g.41247872C>A		
+ Bonnie Pena	36	3	 Other	HiSeq	c.669G>A	p.(=)	g.41247864C>T		
+ Lorraine Wise	68	3	 Other	MiSeq	c.670G>C	"p.?, p.(Ala224Pro)"	g.41247863C>G		
+ Shawna Arnold	26	2	 Invasive_ductal	MiSeq	c.670+1delG	?	g.41247862delC		
+ Nettie Rose	45	3	 Tubular	HiSeq	c.670+1G>T	p.?	g.41247862C>A		
+ Darla Sullivan	53	3	 Mucinous	HiSeq	c.670+7G>A	?	g.41247856C>T		
+ Carolyn Colon	38	3	 Invasive_ductal	HiSeq	c.670+8C>A	p.?	g.41247855G>T		
+ Irene James	57	3	 Other	HiSeq	c.670+8C>T	"p.?, p.=, ?, NA"	g.41247855G>A		
+ Molly Copeland	67	3	 Mixed_type	HiSeq	c.1881_1882insCC	p.(Ser628Profs*5)	g.41245666_41245667insGG		
+ Joanna White	51	2	 Papillary	HiSeq	c.1884T>G	p.Ser628Arg	g.41245664A>C		
+ Megan Greene	32	1	 Invasive_ductal	HiSeq	c.1892dup	p.(Ser632Lysfs*4)	g.41245656dup		
+ Marie Brady	70	3	 Invasive_lobular	HiSeq	c.1895G>A	p.Ser632Asn	g.41245653C>T		
+ Renee Duncan	60	1	 Papillary	MiSeq	c.3816C>A	p.(Asn1272Lys)	g.41243732G>T		
+ Sherri Castillo	50	2	 Medullary	MiSeq	c.3820dup	p.(Val1274Glyfs*13)	g.41243728dup		
+ Jill Hodges	44	2	 Tubular	MiSeq	c.3820dupG	p.(Val1274fs)	g.41243728dup		
+ Amy Rodgers	33	3	 Papillary	HiSeq	c.3823A>G	"p.(Ile1275Val), p.Ile1275Val"	g.41243725T>C		
+ Jo Curtis	29	2	 Mixed_type	HiSeq	c.3835G>A	p.(Ala1279Thr)	g.41243713C>T		
+ Rachael Davis	46	3	 Tubular	HiSeq	c.3839_3840inv	p.(Ser1280*)	g.41243708_41243709inv		
+ Eleanor Lee	64	3	 Medullary	MiSeq	c.3839_3843delinsAGGC	p.(Ser1280*)	g.41243705_41243709delinsGCCT		
+ Amber Cummings	63	3	 Papillary	HiSeq	c.3841C>T	p.(Gln1281*)	g.41243707G>A		
+ Teresa Fuller	32	3	 Other	HiSeq	c.3845A>T	p.(Glu1282Val)	g.41243703T>A		
+ Jana Daniels	41	2	 Other	HiSeq	c.3851A>G	p.His1284Arg	g.41243697T>C		
+ Jackie Byrd	48	2	 Mucinous	HiSeq	c.3858_3861del	p.(Ser1286Argfs*20)	g.41243687_41243690del		
+ Jacqueline Hanson	55	1	 Tubular	MiSeq	c.3869_3870del	p.(Lys1290Metfs*4)	g.41243678_41243679del		
+ Monica Fowler	65	1	 Mixed_type	MiSeq	c.3878C>T	p.Ala1293Val	g.41243670G>A		
+ Bethany Spencer	62	1	 Invasive_ductal	HiSeq	c.3889delT	p.(fs)	g.41243659delA		
+ Belinda Hall	34	1	 Tubular	HiSeq	c.3891_3893del	"p.(Ser1298del), p.(Ser1297del)"	g.41243655_41243657del		
+ Claire Cox	26	2	 Invasive_lobular	HiSeq	c.3903T>A	"p.(Ser1301Arg), p.(Ser1340Arg)"	g.41243645A>T		
+ Janie Hamilton	43	2	 Mucinous	HiSeq	c.3904G>T	p.(Glu1302*)	g.41243644C>A		
+ Jennifer Steele	31	2	 Medullary	HiSeq	c.3910G>T	p.(Glu1304*)	g.41243638C>A		
+ Hilda Morris	52	2	 Mixed_type	HiSeq	c.3914A>T	p.(Asp1305Val)	g.41243634T>A		
+ Bernadette Harvey	25	2	 Mucinous	HiSeq	c.3916_3917del	p.(Leu1306Aspfs*23)	g.41243631_41243632del		
+ Velma Dean	27	1	 Invasive_lobular	HiSeq	c.3918G>A	p.=	g.41243630C>T		
+ Carol Carson	61	2	 Other	MiSeq	c.3918G>T	p.(Leu1306Phe)	g.41243630C>A		
+ Faye Kelley	30	2	 Medullary	MiSeq	c.3929C>A	p.Thr1310Lys	g.41243619G>T		
+ Kendra Chapman	69	1	 Invasive_lobular	MiSeq	c.3931_3934del	"p.(Asn1311Profs*6), p.(Asn1311fs)"	g.41243614_41243617del		
+ Elizabeth Paul	39	1	 Invasive_ductal	HiSeq	c.3959C>G	p.(Ser1320Cys)	g.41243589G>C		
+ Margie Neal	64	3	 Invasive_lobular	HiSeq	c.3973del	p.(Arg1325Glyfs*11)	g.41243575del		
+ Krystal Gill	60	2	 Mucinous	HiSeq	c.3994G>A	p.(Gly1332*)	g.41243554C>T		
+ Marta Young	37	2	 Papillary	MiSeq	c.4002T>C	p.(=)	g.41243546A>G		
+ Sonya Barker	49	3	 Mixed_type	HiSeq	c.4013del	p.(Lys1338fs)	g.41243535del		
+ Miranda Hughes	59	3	 Invasive_ductal	HiSeq	c.4015dup	p.(Glu1339Glyfs*6)	g.41243533dup		
+ Candace Ortiz	53	1	 Papillary	HiSeq	c.4015dupG	p.(Glu1339fs)	g.41243533dup		
+ Mercedes Keller	35	1	 Invasive_ductal	HiSeq	c.4015G>A	p.(Glu1339Lys)	g.41243533C>T		
+ Nicole Valdez	70	3	 Tubular	MiSeq	c.4025C>T	p.(Ser1342Leu)	g.41243523G>A		
+ Ella Munoz	36	2	 Tubular	MiSeq	c.4026A>C	p.(=)	g.41243522T>G		
+ Carrie Fitzgerald	38	1	 Mucinous	HiSeq	c.4035del	"p.(Glu1346Lysfs*20), p.(Glu1346fs)"	g.41243513del		
+ Ashley Maxwell	54	2	 Medullary	HiSeq	c.4036G>A	"p.Glu1346Lys, p.(Glu1346Lys)"	g.41243512C>T		
+ Shannon Simmons	58	1	 Mucinous	HiSeq	c.4039A>G	"p.(Arg1347Gly), p.Arg1347Gly"	g.41243509T>C		
+ Emily Hardy	40	1	 Invasive_lobular	HiSeq	c.4045A>C	p.Thr1349Pro	g.41243503T>G		
+ Jean Fox	47	3	 Mixed_type	HiSeq	c.4046C>G	p.Thr1349Arg	g.41243502G>C		
+ Gayle Webster	67	3	 Other	HiSeq	c.4046C>T	"p.(Thr1349Met), p.Thr1349Met"	g.41243502G>A		
+ Stacey Jenkins	57	3	 Mucinous	HiSeq	c.4054G>A	p.(Glu1352Lys)	g.41243494C>T		
+ Hannah Sparks	33	1	 Mixed_type	HiSeq	c.4057G>T	p.(Glu1353*)	g.41243491C>A		
+ Stella Walsh	66	2	 Invasive_ductal	MiSeq	c.4065_4068del	"p.(Asn1355LysfsTer10), p.(Asn1355Lysfs*10), p.Asn1355fs, p.(Asn1355fs)"	g.41243480_41243483del		
+ Mona Farmer	42	3	 Medullary	MiSeq	c.4081A>C	p.Met1361Leu	g.41243467T>G		
+ Lana Harris	51	2	 Papillary	MiSeq	c.4088C>G	p.(Ser1363*)	g.41243460G>C		
+ Angie Jones	46	3	 Tubular	MiSeq	c.4096G>A	p.(Gly1366Ser)	g.41243452C>T		
+ Ann Woods	28	2	 Invasive_lobular	MiSeq	c.4096+1G>A	?	g.41243451C>T		
+ Shelia Stephens	44	1	 Other	MiSeq	c.4096+3A>T	p.?	g.41243449T>A		
+ Claudia Payne	56	1	 Medullary	MiSeq	c.4096+6G>A	p.?	g.41243446C>T		
+ Natalie Knight	50	3	 Medullary	MiSeq	c.4096+27C>T	p.?	g.41243425G>A		
+ Laverne Anderson	29	1	 Other	MiSeq	c.4096+162delA	p.?	g.41243290delT		
+ Elvira Lane	45	2	 Mixed_type	HiSeq	c.4097-141A>C	p.(=)	g.41243190T>G		
+ Felicia Griffith	68	2	 Tubular	HiSeq	c.4097-21C>T	p.?	g.41243070G>A		
+ Joann Reid	64	3	 Invasive_ductal	HiSeq	c.548-9A>G	p.?	g.41249315T>C		
+ Faith Foster	55	2	 Papillary	HiSeq	c.552T>C	p.=	g.41249302A>G		
+ Sophia Brooks	38	2	 Invasive_lobular	HiSeq	c.556T>G	p.(Ser186Ala)	g.41249298A>C		
+ Toni Tran	41	1	 Other	HiSeq	c.557C>A	"p.(Ser186Tyr), p.Ser186Tyr"	g.41249297G>T		
+ Lauren Harrison	26	2	 Tubular	HiSeq	c.(-20+1_-19-1)_(*1383_?)del	p.?	g.(?_41196312)_(41276133_41277287)del		
+ Lorene Reynolds	49	3	 Invasive_lobular	HiSeq	c.-20+11C>T	p.?	g.41277277G>A		
+ Mindy Tucker	40	1	 Other	MiSeq	c.-20+101C>G	p.(=)	g.41277187G>C		
+ Geneva Howard	65	3	 Mixed_type	HiSeq	c.-19-134T>C	p.(=)	g.41276266A>G		
+
