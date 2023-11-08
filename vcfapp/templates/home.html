@@ -2,9 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Your Site Title</title>
+    <title>Variant database</title>
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    {% load static %}
+    <link rel="shortcut icon" href="{% static 'favicon-32x32.png' %}"/>
 </head>
 <body>
     <div class="container">
@@ -46,8 +48,8 @@
                     <td>{{ variant.MAF }}</td>
                     <td>{{ variant.ambiguity }}</td>
                     <td>{{ variant.var_class }}</td>
-                    <td>{{ variant.synonyms|join:", " }}</td>
-                    <td>{{ variant.evidence|join:", " }}</td>
+                    <td>{{ variant.synonyms}}</td>
+                    <td>{{ variant.evidence}}</td>
                     <td>{{ variant.ancestral_allele }}</td>
                     <td>{{ variant.minor_allele }}</td>
                     <td>{{ variant.most_severe_consequence }}</td>
