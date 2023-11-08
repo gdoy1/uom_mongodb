@@ -13,12 +13,17 @@ def home(request):
 
     # Get the start coordinate from the GET request
     start_coord = request.GET.get('start')
+    end_coord = request.GET.get('end')
 
     # Initialize the query
     query = {}
     if start_coord:
         # Adjust this line if start is stored differently in your database
         query['mappings.0.start'] = int(start_coord)
+
+    if end_coord:
+        # Adjust this line if start is stored differently in your database
+        query['mappings.0.end'] = int(end_coord)
 
     # Apply the query and get the count for pagination
     filtered_variants_cursor = collection.find(query)
@@ -49,6 +54,7 @@ def home(request):
         'current_page': page_number,
         'total_pages': total_pages,
         'start_coord': start_coord,  # Pass the start coordinate for use in the template
+        'end_coord': end_coord,  # Pass the end coordinate for use in the template
     }
 
     return render(request, 'home.html', context)

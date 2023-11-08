@@ -14,6 +14,8 @@
                     <div class="form-group">
                         <label for="start_coord">Start Coordinate:</label>
                         <input type="text" id="start_coord" name="start" value="{{ request.GET.start }}" class="form-control" placeholder="Enter start coordinate">
+                        <label for="end_coord">End Coordinate:</label>
+                        <input type="text" id="end_coord" name="end" value="{{ request.GET.end }}" class="form-control" placeholder="Enter end coordinate">
                     </div>
                     <button type="submit" class="btn btn-primary">Search</button>
                 </form>
@@ -62,13 +64,17 @@
                     <td>{{ variant.minor_allele }}</td>
                     <td>{{ variant.most_severe_consequence }}</td>
                     <td>
+                        <center>
+                        <form action="{% url 'modify_variant' variant.id %}" method="get">
+                            <input type="submit" value="Modify" class="btn btn-info btn-sm"><p></p>
+                        </form>
+                        </form>
+                        <button type="button" class="btn btn-success btn-sm" onclick="getClassification('{{ variant.name }}')">Classify</button><p></p>
                         <form action="{% url 'delete_variant' variant.id %}" method="post">
                             {% csrf_token %}
                             <input type="submit" value="Delete" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this record?');">
                         </form>
-                        <form action="{% url 'modify_variant' variant.id %}" method="get">
-                            <input type="submit" value="Modify" class="btn btn-info btn-sm">
-                        </form> 
+                        </center>
                     </td>
                 </tr>
                 {% endfor %}
@@ -96,7 +102,24 @@
 
 
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function getClassification(variantName) {
+            const url = `https://rest.ensembl.org/vep/human/id/${variantName}?content-type=application/json`;
+        
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function(response) {
+                    alert(JSON.stringify(response, null, 2));  // For now, we'll just show the raw response
+                },
+                error: function(error) {
+                    // Handle any errors here
+                    alert('Error retrieving classification: ' + error.statusText);
+                }
+            });
+        }
+        </script>        
 </body>
 </html>
