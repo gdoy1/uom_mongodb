@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Modify Variant</title>
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Modify Variant</h1>
+        <form action="{% url 'modify_variant' variant.id %}" method="post">
+            {% csrf_token %}
+            <!-- Form fields for each attribute of the variant -->
+            <div class="form-group">
+                <label for="name">Variant Name:</label>
+                <input type="text" id="name" name="name" value="{{ variant.name }}" class="form-control">
+            </div>
+            <!-- Add more form fields for other attributes -->
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+    </div>
+
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
