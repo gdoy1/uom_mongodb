@@ -62,3 +62,68 @@ def delete_variant(request, id):
         return HttpResponseRedirect(reverse('home'))
     else:
         return HttpResponseRedirect(reverse('home'))
+
+# Other imports ...
+
+def modify_variant(request, id):
+    client = MongoClient('mongodb://localhost:27017/')
+    db = client['mydatabase']
+    collection = db['variants']
+    variant = collection.find_one({'_id': ObjectId(id)})
+    if variant is None:
+        raise Http404("Variant not found")
+
+    if request.method == 'POST':
+        # Extract data from the form
+        source = request.POST.get('source')
+        location = request.POST.get('location')
+        assembly_name = request.POST.get('assembly_name')
+        end = request.POST.get('end')
+        seq_region_name = request.POST.get('seq_region_name')
+        strand = request.POST.get('strand')
+        allele_string = request.POST.get('allele_string')
+        start = request.POST.get('start')
+        name = request.POST.get('name')
+        maf = request.POST.get('maf')
+        ambiguity = request.POST.get('ambiguity')
+        var_class = request.POST.get('var_class')
+        synonyms = request.POST.get('synonyms')
+        evidence = request.POST.get('evidence')
+        ancestral_allele = request.POST.get('ancestral_allele')
+        minor_allele = request.POST.get('minor_allele')
+        most_severe_consequence = request.POST.get('most_severe_consequence')
+
+        # Create an update object
+        update = {
+            'source': source,
+            'mappings': [{
+                'location': location,
+                'assembly_name': assembly_name,
+                'end': int(end),
+                'seq_region_name': seq_region_name,
+                'strand': int(strand),
+                'allele_string': allele_string,
+                'start': int(start)
+            }],
+            'name': name,
+            'MAF': maf,
+            'ambiguity': ambiguity,
+            'var_class': var_class,
+            'synonyms': synonyms.split(', '),  # Assuming synonyms are a comma-separated list
+            'evidence': evidence.split(', '),  # Assuming evidence are a comma-separated list
+            'ancestral_allele': ancestral_allele,
+            'minor_allele': minor_allele,
+            'most_severe_consequence': most_severe_consequence
+        }
+
+        # Update the variant in the database
+        collection.update_one({'_id': ObjectId(id)}, {'$set': update})
+
+        # Redirect back to the home page, or to a success page
+        return HttpResponseRedirect(reverse('home'))
+    else:
+        # Include 'id' in case you need it for the form action URL
+        variant['id'] = str(variant['_id'])
+        # Pass the variant dictionary directly to the template.
+        # It will contain all the values needed for the form fields.
+        return render(request, 'modify_variant.html', {'variant': variant})

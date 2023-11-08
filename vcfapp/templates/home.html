@@ -65,7 +65,10 @@
                         <form action="{% url 'delete_variant' variant.id %}" method="post">
                             {% csrf_token %}
                             <input type="submit" value="Delete" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this record?');">
-                        </form>                     
+                        </form>
+                        <form action="{% url 'modify_variant' variant.id %}" method="get">
+                            <input type="submit" value="Modify" class="btn btn-info btn-sm">
+                        </form> 
                     </td>
                 </tr>
                 {% endfor %}
