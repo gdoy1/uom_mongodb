@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div >
+    <div>
+        <h2>Bulk Upload</h2>
+    </div>
+    <hr>
+    <p><i>Upload variants.json file</i></p>
+    <hr>
+    <br>  
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form}}
+        <button type="submit">Upload</button>
+    </form>
+    <hr>
+</div>
+
+{% endblock content %}
