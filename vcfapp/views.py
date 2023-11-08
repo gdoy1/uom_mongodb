@@ -3,27 +3,39 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 from pymongo import MongoClient
-from bson import ObjectId
+from bson import ObjectId, regex
 
 def home(request):
-    # Connect to the MongoDB database
+    # Connect to MongoDB
     client = MongoClient('mongodb://localhost:27017/')
     db = client['mydatabase']
     collection = db['variants']
 
-    # Get the start coordinate from the GET request
-    start_coord = request.GET.get('start')
-    end_coord = request.GET.get('end')
+    # Get the search term from the GET request
+    search_term = request.GET.get('search', '')
 
     # Initialize the query
-    query = {}
-    if start_coord:
-        # Adjust this line if start is stored differently in your database
-        query['mappings.0.start'] = int(start_coord)
-
-    if end_coord:
-        # Adjust this line if start is stored differently in your database
-        query['mappings.0.end'] = int(end_coord)
+    if search_term:
+        # Construct a regex query that searches all fields
+        regex_query = regex.Regex(search_term, 'i')  # 'i' for case-insensitive
+        query = {
+            '$or': [
+                {'source': regex_query},
+                {'mappings.location': regex_query},
+                {'mappings.assembly_name': regex_query},
+                {'name': regex_query},
+                {'MAF': regex_query},
+                {'ambiguity': regex_query},
+                {'var_class': regex_query},
+                {'synonyms': regex_query},
+                {'evidence': regex_query},
+                {'ancestral_allele': regex_query},
+                {'minor_allele': regex_query},
+                {'most_severe_consequence': regex_query}
+            ]
+        }
+    else:
+        query = {}
 
     # Apply the query and get the count for pagination
     filtered_variants_cursor = collection.find(query)
@@ -53,8 +65,6 @@ def home(request):
         'page_range': page_range,
         'current_page': page_number,
         'total_pages': total_pages,
-        'start_coord': start_coord,  # Pass the start coordinate for use in the template
-        'end_coord': end_coord,  # Pass the end coordinate for use in the template
     }
 
     return render(request, 'home.html', context)
@@ -133,3 +143,25 @@ def modify_variant(request, id):
         # Pass the variant dictionary directly to the template.
         # It will contain all the values needed for the form fields.
         return render(request, 'modify_variant.html', {'variant': variant})
+
+def visual_summary(request):
+    client = MongoClient('mongodb://localhost:27017/')
+    db = client['mydatabase']
+    collection = db['variants']
+
+    # Aggregate the counts for each type of most_severe_consequence
+    pipeline = [
+        {"$group": {"_id": "$most_severe_consequence", "count": {"$sum": 1}}}
+    ]
+    consequences = list(collection.aggregate(pipeline))
+
+    # Convert the aggregation result into a format suitable for the charting library
+    labels = [consequence['_id'] for consequence in consequences]
+    counts = [consequence['count'] for consequence in consequences]
+
+    context = {
+        'labels': labels,
+        'counts': counts,
+    }
+
+    return render(request, 'visual_summary.html', context)
