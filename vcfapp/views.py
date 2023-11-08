@@ -1,20 +1,19 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render
-from pymongo import MongoClient
 
 import json
 from json.decoder import JSONDecodeError
 
 from .forms import UploadForm
+from .utils import VcfAppUtils
 
-def connect_to_database():
-    # Connect to the MongoDB database
-    client = MongoClient('mongodb://localhost:27017/')
-    return client['mydatabase']    
+helper = VcfAppUtils()
+
+
 
 def home(request):
     # Connect to the MongoDB database
-    db = connect_to_database()
+    db = helper.connect_to_database()
     collection = db['variants']
 
     # Fetch all documents within the 'variants' collection
@@ -31,24 +30,19 @@ def home(request):
 
 def upload(request):
     # Connect to the MongoDB database
-    db = connect_to_database()
+    db = helper.connect_to_database()
     collection = db['variants']
 
     if request.method == 'POST':        
         form = UploadForm(request.POST, request.FILES)
-        upload_file = request.FILES['file'].file.getvalue()
-        for line in upload_file.decode('utf-8').split('\n'):
-            if line.strip():
-                try:
+        if form.is_valid():
+            upload_file = request.FILES['file'].file.getvalue()
+            for line in upload_file.decode('utf-8').split('\n'):
+                if line.strip():
                     json_data = json.loads(line)
-                    # check if name already exists in collection
-                    # use same function/check as individual add variant
-                    name = json_data['name']
-                    if name:
-                        collection.insert_one(json_data)
-                except JSONDecodeError:
-                    print(f'Error: follow line not in JSON format...\n{line}')
+                    collection.insert_one(json_data)  
+                    form = UploadForm()                         
     else:
         form = UploadForm()
-
-    return render(request, 'upload.html', {'form': form})
+        
+    return render(request, 'upload.html', {'form': form}) 
