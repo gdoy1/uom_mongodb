@@ -15,14 +15,14 @@
         const ctx = document.getElementById('variantChart').getContext('2d');
         const labels = {{ labels|safe }};
         const dataValues = {{ counts|safe }};
-        
+
         function getRandomColor() {
             const r = Math.floor(Math.random() * 255);
             const g = Math.floor(Math.random() * 255);
             const b = Math.floor(Math.random() * 255);
             return `rgba(${r}, ${g}, ${b}, 0.5)`;
         }
-        
+
         const backgroundColors = labels.map(() => getRandomColor());
         const borderColors = backgroundColors.map(color => color.replace('0.5', '1'));
 
