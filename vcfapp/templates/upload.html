@@ -31,9 +31,10 @@
             <br>
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                {{form}}
+                {{form|crispy}}
                 <button type="submit">Upload</button>
             </form>
+            <p></p>
             {% if messages %}
                 {% for message in messages %}
                     <h2>{{message}}</h2>

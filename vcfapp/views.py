@@ -251,6 +251,8 @@ def upload(request):
                     collection.insert_one(json_data)
             form = UploadForm()
             messages.success(request, 'Upload successful')
+        else:
+            messages.error(request, 'Upload failed')
     else:
         form = UploadForm()
 
