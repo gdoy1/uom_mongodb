@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'vcfapp',
+    'crispy_forms',
+    'crispy_bootstrap4'
 ]
 
 MIDDLEWARE = [
@@ -80,7 +82,7 @@ DATABASES = {
         'NAME': 'your_db_name',  # Use the name of your MongoDB database
         'ENFORCE_SCHEMA': False,
         'CLIENT': {
-            'host': 'mongodb://172.17.0.3:27017',  # Use the IP address of your MongoDB container
+            'host': 'mongodb://172.17.0.2:27017',  # Use the IP address of your MongoDB container
         }
     }
 }
@@ -126,3 +128,5 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
