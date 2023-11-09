@@ -26,7 +26,7 @@
                     <button type="submit" class="btn btn-primary" name="search_range" value="true">Search Range</button><p></p>
                 </form>
             </div>
-        <a class="btn btn-primary" href="javascript:void(0);" onclick="openGraphPopup()">Query Summary Graph</a>
+        <a id="visualSummaryLink" class="btn btn-primary" href="javascript:void(0);" onclick="openGraphPopup()">Query Summary Graph</a>
         <p></p>
         <div class="table-responsive">
             <table id="variantsTable" class="table table-bordered">
@@ -169,6 +169,19 @@
     </script>
 
     <script>
+        // Hide the visualSummaryLink when the page loads
+        document.addEventListener('DOMContentLoaded', function () {
+            var startValue = document.getElementById('start_range').value;
+            var endValue = document.getElementById('end_range').value;
+
+            if (startValue.trim() === '' || endValue.trim() === '') {
+                // Hide the anchor tag if either startValue or endValue is empty
+                document.getElementById('visualSummaryLink').style.display = 'none';
+            }
+        });
+    </script>
+
+    <script>
         function getClassification(variantName, button) {
             // Find the loading GIF image next to the button and show it
             const loadingGif = $(button).siblings('.loading-gif');
@@ -203,20 +216,22 @@
     <script>
         function openGraphPopup() {
             // Get the values from the text boxes
-            // var startValue = document.getElementById('start_range').value;
-            // var endValue = document.getElementById('end_range').value;
+            var startValue = document.getElementById('start_range').value;
+            var endValue = document.getElementById('end_range').value;
 
-            var startValue = 130830186
-            var endValue = 130830237
+            // Check if startValue and endValue are empty
+            if (startValue.trim() === '' || endValue.trim() === '') {
+                // Hide the anchor tag if either startValue or endValue is empty
+                document.getElementById('visualSummaryLink').style.display = 'none';
+            } else {
+                // Build the URL with the dynamic start and end values
+                var url = 'visual-summary-query/' + startValue + '/' + endValue + '/';
 
-            // Build the URL with the dynamic start and end values
-            var url = 'visual-summary-query/' + startValue + '/' + endValue + '/';
-
-            // Open the popup window with the dynamic URL
-            window.open(url, 'Query Visual Summary', 'width=1200,height=800');
+                // Open the popup window with the dynamic URL
+                window.open(url, 'Query Visual Summary', 'width=1200,height=800');
+            }
         }
     </script>
-
 
 {% endblock %}
 </body>
