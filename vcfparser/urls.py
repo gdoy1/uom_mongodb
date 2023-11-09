@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from vcfapp.views import home
 from vcfapp import views
-from vcfapp.views import home, add_individual_data_view
+from vcfapp.views import home, add_individual_data_view, upload
 
 urlpatterns = [
     path("admin/", admin.site.urls),
