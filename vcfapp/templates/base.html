@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Variant Database</title>
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- Datatables CDNs -->
+    <link rel="stylesheet" href="//cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+    <script src="//cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.13.7/dataRender/ellipsis.js"></script>
+</head>
+
+
+<body>
+    <div>
+        <div> <!-- navbar add-individual-var  -->
+            {% block navbar %}
+            <nav class="navbar navbar-expand-lg navbar-dark py-0" style="background-color:#4ca463 ;">
+                <div class="container-fluid">
+                    <a class="navbar-brand fs-3" id="navbar-logo" href="{% url 'home' %}">Variant DB</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                        <ul class="navbar-nav mx-auto">
+                            <li id="link-home" class="nav-item">
+                                <a id='home' class="nav-link {% if nbar == 'home' %}active{% endif %}"
+                                    aria-current="page" href="{% url 'home' %}">Query Variants</a>
+                            </li>
+                        </ul>
+                        <li id ="link-add-individual-var" class="nav-item">
+                            <a id='add-individual-var' class="nav-link" href="{% url 'add-individual-var' %}">Add Variant</a>
+                        </li>
+                        <li id ="link-upload" class="nav-item">
+                            <a id='upload' class="nav-link" href="{% url 'upload' %}">Bulk Upload</a>
+                        </li>
+                    </div>
+                </div>
+            </nav>
+            {% endblock %}
+        </div>
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+    {% block script %}
+    <script>
+        // require('datatables.net-plugins/dataRender/ellipsis.js');
+        $(document).ready(function () {
+            $('#variants_html').DataTable({
+                "paging": false,
+                "columnDefs": [ {
+                    "targets": 0,
+                    "render": DataTable.render.ellipsis( 17, true )
+                  } ],
+                "scrollCollapse": false,
+                "scrollY": '50vh',
+                "scrollX": true,
+                "info": false,
+                "searching": false,
+                "order": [[0, "asc"]],
+                "responsive": true
+            });
+        });
+    </script>
+    {% endblock %}
+
+</body>
+
+</html>
