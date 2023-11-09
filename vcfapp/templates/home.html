@@ -26,6 +26,16 @@
                     <button type="submit" class="btn btn-primary" name="search_range" value="true">Search Range</button><p></p>
                 </form>
             </div>
+
+        <!-- Checkbox to toggle view -->
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="toggleViewCheckbox">
+            <label class="form-check-label" for="toggleViewCheckbox">
+                Show Full View
+            </label>
+        </div>
+
+        <!-- Table with toggleable columns -->
         <div class="table-responsive">
             <table id="variantsTable" class="table table-bordered">
                 <thead>
@@ -33,19 +43,19 @@
                         <th>Source</th>
                         <th>Location</th>
                         <th>Assembly Name</th>
-                        <th>End</th>
-                        <th>Seq Region Name</th>
-                        <th>Strand</th>
+                        <th class="toggle-column">End</th>
                         <th>Allele String</th>
-                        <th>Start</th>
                         <th>Name</th>
                         <th>MAF</th>
-                        <th>Ambiguity</th>
+                        <th class="toggle-column">Seq Region Name</th>
+                        <th class="toggle-column">Strand</th>
+                        <th class="toggle-column">Start</th>
                         <th>Var Class</th>
                         <th>Synonyms</th>
                         <th>Evidence</th>
-                        <th>Ancestral Allele</th>
-                        <th>Minor Allele</th>
+                        <th class="toggle-column">Ambiguity</th>
+                        <th class="toggle-column">Ancestral Allele</th>
+                        <th class="toggle-column">Minor Allele</th>
                         <th>Most Severe Consequence</th>
                         <th>Actions</th>
                     </tr>
@@ -153,15 +163,16 @@
     <script type="text/javascript" charset="utf8" 
             src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 
-    <!-- Your script to initialize DataTables -->
+    <!-- Initialize DataTables and Toggle Columns Script -->
     <script>
     $(document).ready(function () {
-        $('#variantsTable').DataTable({
+        // Initialize DataTables and assign the instance to a variable
+        var table = $('#variantsTable').DataTable({
             "pagingType": "simple_numbers",
             "ordering": true,
             "columnDefs": [ {
-                "targets": 0,
-                "render": dataTables.render.ellipsis( 17, true )
+                "targets": [3, 7, 8, 9, 13, 14, 15],  // Specify the target columns to be hidden
+                "visible": false  // Set the initial visibility to false
               } ],
             "scrollCollapse": false,
             "scrollY": '50vh',
@@ -169,7 +180,15 @@
             "info": false,
             "searching": false,
             "order": [[0, "asc"]],
-            "responsive": true,
+            "responsive": true
+        });
+
+        // Checkbox event to toggle the view
+        $('#toggleViewCheckbox').change(function () {
+            // Get the columns that were initially hidden
+            var toggleColumns = table.columns('.toggle-column');
+            // Toggle the visibility based on the checkbox
+            toggleColumns.visible(this.checked);
         });
     });
     </script>
@@ -211,7 +230,7 @@
             // Open a new popup window with specified width and height
             window.open(url, '_blank', 'width=800,height=600,left=200,top=200');
         }
-    </script>  
+    </script>         
 {% endblock %}
 </body>
 </html>
