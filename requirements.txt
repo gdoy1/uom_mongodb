@@ -10,3 +10,4 @@ sqlparse==0.2.4
 typing_extensions==4.8.0
 pandas
 retrying
+django-crispy-forms
