@@ -37,13 +37,16 @@
                                 <a id='home' class="nav-link {% if nbar == 'home' %}active{% endif %}"
                                     aria-current="page" href="{% url 'home' %}">Query Variants</a>
                             </li>
+                            <li id ="link-add-individual-var" class="nav-item">
+                                <a id='add-individual-var' class="nav-link" href="{% url 'add-individual-var' %}">Add Variant</a>
+                            </li>
+                            <li id ="link-upload" class="nav-item">
+                                <a id='upload' class="nav-link" href="{% url 'upload' %}">Bulk Upload</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'visual-summary' %}">Visual summary</a>
+                            </li>
                         </ul>
-                        <li id ="link-add-individual-var" class="nav-item">
-                            <a id='add-individual-var' class="nav-link" href="{% url 'add-individual-var' %}">Add Variant</a>
-                        </li>
-                        <li id ="link-upload" class="nav-item">
-                            <a id='upload' class="nav-link" href="{% url 'upload' %}">Bulk Upload</a>
-                        </li>
                     </div>
                 </div>
             </nav>
@@ -54,25 +57,6 @@
         </div>
     </div>
     {% block script %}
-    <script>
-        // require('datatables.net-plugins/dataRender/ellipsis.js');
-        $(document).ready(function () {
-            $('#variants_html').DataTable({
-                "paging": false,
-                "columnDefs": [ {
-                    "targets": 0,
-                    "render": DataTable.render.ellipsis( 17, true )
-                  } ],
-                "scrollCollapse": false,
-                "scrollY": '50vh',
-                "scrollX": true,
-                "info": false,
-                "searching": false,
-                "order": [[0, "asc"]],
-                "responsive": true
-            });
-        });
-    </script>
     {% endblock %}
 
 </body>
