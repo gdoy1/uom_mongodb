@@ -14,9 +14,28 @@
                         <label for="search_term">Search Term:</label>
                         <input type="text" id="search_term" name="search" value="{{ request.GET.search }}" class="form-control" placeholder="Enter search term">
                     </div>
+                    <div class="form-group">
+                        <label for="start_range">Start Range:</label>
+                        <input type="number" id="start_range" name="start_range" value="{{ request.GET.start_range }}" class="form-control" placeholder="Enter start range">
+                    </div>
+                    <div class="form-group">
+                        <label for="end_range">End Range:</label>
+                        <input type="number" id="end_range" name="end_range" value="{{ request.GET.end_range }}" class="form-control" placeholder="Enter end range">
+                    </div>
                     <button type="submit" class="btn btn-primary">Search</button><p></p>
+                    <button type="submit" class="btn btn-primary" name="search_range" value="true">Search Range</button><p></p>
                 </form>
             </div>
+
+        <!-- Checkbox to toggle view -->
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="toggleViewCheckbox">
+            <label class="form-check-label" for="toggleViewCheckbox">
+                Show Full View
+            </label>
+        </div>
+
+        <!-- Table with toggleable columns -->
         <div class="table-responsive">
             <table id="variantsTable" class="table table-bordered">
                 <thead>
@@ -24,19 +43,19 @@
                         <th>Source</th>
                         <th>Location</th>
                         <th>Assembly Name</th>
-                        <th>End</th>
-                        <th>Seq Region Name</th>
-                        <th>Strand</th>
+                        <th class="toggle-column">End</th>
                         <th>Allele String</th>
-                        <th>Start</th>
                         <th>Name</th>
                         <th>MAF</th>
-                        <th>Ambiguity</th>
+                        <th class="toggle-column">Seq Region Name</th>
+                        <th class="toggle-column">Strand</th>
+                        <th class="toggle-column">Start</th>
                         <th>Var Class</th>
                         <th>Synonyms</th>
                         <th>Evidence</th>
-                        <th>Ancestral Allele</th>
-                        <th>Minor Allele</th>
+                        <th class="toggle-column">Ambiguity</th>
+                        <th class="toggle-column">Ancestral Allele</th>
+                        <th class="toggle-column">Minor Allele</th>
                         <th>Most Severe Consequence</th>
                         <th>Actions</th>
                     </tr>
@@ -75,11 +94,24 @@
                                     {% csrf_token %}
                                     <input type="submit" value="Delete" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this record?');">
                                 </form>
+                                {% if variant.most_severe_consequence == 'missense_variant' %}
+                                <p></p>
+                                <button class="btn btn-primary alpha-missense-button" 
+                                data-chrom="{{ variant.mappings.0.seq_region_name }}" 
+                                data-pos="{{ variant.mappings.0.start }}" 
+                                data-ref="{{ variant.mappings.0.allele_string|slice:":1" }}" 
+                                data-alt="{{ variant.mappings.0.allele_string|slice:"2:" }}" 
+                                onclick="alphaMissense('{{ variant.mappings.0.seq_region_name }}', '{{ variant.mappings.0.start }}', '{{ variant.mappings.0.allele_string|slice:":1" }}', '{{ variant.mappings.0.allele_string|slice:"2:" }}')">
+                                    AlphaMissense
+                                </button>                                                                                                
+                        {% endif %}
                             </center>
                         </td>
                     </tr>
                     {% endfor %}
             </table>
+            <!-- AlphaMissense result placeholder -->
+            <div id="alpha-missense-result"></div>
         </div>
         <!-- Pagination controls -->
         <nav aria-label="Page navigation">
@@ -131,15 +163,16 @@
     <script type="text/javascript" charset="utf8" 
             src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 
-    <!-- Your script to initialize DataTables -->
+    <!-- Initialize DataTables and Toggle Columns Script -->
     <script>
     $(document).ready(function () {
-        $('#variantsTable').DataTable({
+        // Initialize DataTables and assign the instance to a variable
+        var table = $('#variantsTable').DataTable({
             "pagingType": "simple_numbers",
             "ordering": true,
             "columnDefs": [ {
-                "targets": 0,
-                "render": DataTable.render.ellipsis( 17, true )
+                "targets": [3, 7, 8, 9, 13, 14, 15],  // Specify the target columns to be hidden
+                "visible": false  // Set the initial visibility to false
               } ],
             "scrollCollapse": false,
             "scrollY": '50vh',
@@ -147,19 +180,26 @@
             "info": false,
             "searching": false,
             "order": [[0, "asc"]],
-            "responsive": true,
+            "responsive": true
+        });
+
+        // Checkbox event to toggle the view
+        $('#toggleViewCheckbox').change(function () {
+            // Get the columns that were initially hidden
+            var toggleColumns = table.columns('.toggle-column');
+            // Toggle the visibility based on the checkbox
+            toggleColumns.visible(this.checked);
         });
     });
     </script>
-
     <script>
         function getClassification(variantName, button) {
             // Find the loading GIF image next to the button and show it
             const loadingGif = $(button).siblings('.loading-gif');
             loadingGif.show();
 
-            // Disable the button
-            button.disabled = true;
+            // Hide the Classify button
+            $(button).hide();
 
             const url = `https://rest.ensembl.org/vep/human/id/${variantName}?content-type=application/json`;
 
@@ -175,13 +215,22 @@
                     alert('Error retrieving classification: ' + error.statusText);
                 },
                 complete: function() {
-                    // Hide the loading GIF and enable the button again
+                    // Hide the loading GIF and show the Classify button again
                     loadingGif.hide();
-                    button.disabled = false;
+                    $(button).show();
                 }
             });
         }
     </script>
+    <script>
+        function alphaMissense(chrom, pos, ref, alt) {
+            // Construct the URL
+            const url = `https://amdb.co.uk/api/v1/variant?chrom=chr${chrom}&pos=${pos}&ref_allele=${ref}&alt_allele=${alt}&genome=hg38`;
+
+            // Open a new popup window with specified width and height
+            window.open(url, '_blank', 'width=800,height=600,left=200,top=200');
+        }
+    </script>         
 {% endblock %}
 </body>
 </html>
