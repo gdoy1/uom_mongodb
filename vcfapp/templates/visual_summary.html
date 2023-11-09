@@ -1,3 +1,6 @@
+{% extends "base.html" %}
+
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +13,6 @@
     <div style="width:50%; height:50%; margin:auto;">
         <canvas id="variantChart"></canvas>
     </div>
-
     <script>
         const ctx = document.getElementById('variantChart').getContext('2d');
         const labels = {{ labels|safe }};
@@ -55,4 +57,5 @@
         });
     </script>
 </body>
+{% endblock %}
 </html>
