@@ -17,8 +17,10 @@ def home(request):
     db = helper.connect_to_database()
     collection = db['variants']
 
-    # Get the search term from the GET request
+    # Get the search term and range from the GET request
     search_term = request.GET.get('search', '')
+    start_range = request.GET.get('start_range', '')
+    end_range = request.GET.get('end_range', '')
 
     # Initialize the query
     if search_term:
@@ -39,6 +41,14 @@ def home(request):
                 {'minor_allele': regex_query},
                 {'most_severe_consequence': regex_query}
             ]
+        }
+    elif start_range and end_range:
+        # Construct a query that filters by start range
+        query = {
+            'mappings.start': {
+                '$gte': int(start_range),
+                '$lte': int(end_range)
+            }
         }
     else:
         query = {}
