@@ -1,5 +1,5 @@
 #  IT for Advanced Bioinformatics Applications: Variant Database
-[![made-with-python][python-image]][python-url] [![django-image]][django-url][![mongodb-image]][mongodb-url]
+[![made-with-python][python-image]][python-url] [![django-image]][django-url] [![mongodb-image]][mongodb-url]
 A variant database created with Django and MongoDB as part of BIOL60860.
 
 ### Developers
@@ -20,5 +20,5 @@ A variant database created with Django and MongoDB as part of BIOL60860.
 [python-url]: https://www.python.org/
 [django-image]: https://img.shields.io/badge/Made%20with-Django-red.svg
 [django-url]: https://www.djangoproject.com/
-[mongo-image]: https://img.shields.io/badge/Made%20with-MongoDB-blue.svg
-[mongo-url]: https://www.mongodb.com/
+[mongodb-image]: https://img.shields.io/badge/Made%20with-MongoDB-blue.svg
+[mongodb-url]: https://www.mongodb.com/

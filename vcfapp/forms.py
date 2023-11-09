@@ -18,30 +18,18 @@ class SingleVariantForm(forms.Form):
         required=True,
         choices=[
             (None, "--- Select a chromosome ---"),
-            ("1", "chr1"),
-            ("2", "chr2"),
-            ("3", "chr3"),
-            ("4", "chr4"),
-            ("5", "chr5"),
-            ("6", "chr6"),
-            ("7", "chr7"),
-            ("8", "chr8"),
-            ("9", "chr9"),
-            ("10", "chr10"),
-            ("11", "chr11"),
-            ("12", "chr12"),
-            ("13", "chr13"),
-            ("14", "chr14"),
-            ("15", "chr15"),
-            ("16", "chr16"),
-            ("17", "chr17"),
-            ("18", "chr18"),
-            ("19", "chr19"),
-            ("20", "chr20"),
-            ("21", "chr21"),
-            ("22", "chr22"),
-            ("X", "chrX"),
-            ("Y", "chrY")
+            ("1", "chr1"), ("2", "chr2"),
+            ("3", "chr3"), ("4", "chr4"),
+            ("5", "chr5"), ("6", "chr6"),
+            ("7", "chr7"), ("8", "chr8"),
+            ("9", "chr9"), ("10", "chr10"),
+            ("11", "chr11"), ("12", "chr12"),
+            ("13", "chr13"), ("14", "chr14"),
+            ("15", "chr15"), ("16", "chr16"),
+            ("17", "chr17"), ("18", "chr18"),
+            ("19", "chr19"), ("20", "chr20"),
+            ("21", "chr21"), ("22", "chr22"),
+            ("X", "chrX"), ("Y", "chrY")
         ]
     )
 
@@ -79,21 +67,14 @@ class SingleVariantForm(forms.Form):
         required=False,
         choices=[
             (None, '--- Select ambiguity ---'),
-            ('A', 'A'),
-            ('C', 'C'),
-            ('G', 'G'),
-            ('T', 'T'),
-            ('R', 'R'),
-            ('Y', 'Y'),
-            ('S', 'S'),
-            ('W', 'W'),
-            ('K', 'K'),
-            ('B', 'B'),
-            ('D', 'D'),
-            ('H', 'H'),
-            ('V', 'V'),
-            ('N', 'N'),
-            ('.', '.'),
+            ('A', 'A'), ('C', 'C'),
+            ('G', 'G'), ('T', 'T'),
+            ('R', 'R'), ('Y', 'Y'),
+            ('S', 'S'), ('W', 'W'),
+            ('K', 'K'), ('B', 'B'),
+            ('D', 'D'), ('H', 'H'),
+            ('V', 'V'), ('N', 'N'),
+            ('.', '.')
         ]
     )
 
@@ -102,15 +83,12 @@ class SingleVariantForm(forms.Form):
         required=False,
         choices=[
             (None, '--- Select variant class ---'),
-            ('SNP', 'SNP'),
-            ('deletion', 'deletion'),
-            ('indel', 'indel'),
-            ('insertion', 'insertion'),
+            ('SNP', 'SNP'), ('deletion', 'deletion'),
+            ('indel', 'indel'), ('insertion', 'insertion'),
             ('sequence_alteration', 'sequence alteration'),
             ('somatic_SNV', 'somatic SNV'),
             ('somatic_deletion', 'somatic deletion'),
-            ('subsitution', 'substitution'),
-            ('tandem_repeat', 'tandem repeat')
+            ('subsitution', 'substitution'), ('tandem_repeat', 'tandem repeat')
         ]
     )
 
