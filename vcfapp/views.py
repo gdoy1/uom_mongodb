@@ -81,6 +81,7 @@ def home(request):
         'page_range': page_range,
         'current_page': page_number,
         'total_pages': total_pages,
+        'total_items': total_items,
     }
 
     return render(request, 'home.html', context)
@@ -249,16 +250,16 @@ def upload(request):
     db = helper.connect_to_database()
     collection = db['variants']
 
-    if request.method == 'POST':        
+    if request.method == 'POST':
         form = UploadForm(request.POST, request.FILES)
         if form.is_valid():
             upload_file = request.FILES['file'].file.getvalue()
             for line in upload_file.decode('utf-8').split('\n'):
                 if line.strip():
                     json_data = json.loads(line)
-                    collection.insert_one(json_data)  
-                    form = UploadForm()                         
+                    collection.insert_one(json_data)
+                    form = UploadForm()
     else:
         form = UploadForm()
-        
-    return render(request, 'upload.html', {'form': form}) 
+
+    return render(request, 'upload.html', {'form': form})
