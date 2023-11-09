@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Modify Variant</title>
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Modify Variant</h1>
+        <form method="post" action="{% url 'modify_variant' variant.id %}">
+            {% csrf_token %}
+            
+            <!-- Form field for each attribute -->
+            <div class="form-group">
+                <label for="source">Source:</label>
+                <input type="text" class="form-control" id="source" name="source" value="{{ variant.source }}">
+            </div>
+            <div class="form-group">
+                <label for="location">Location:</label>
+                <input type="text" class="form-control" id="location" name="location" value="{{ variant.mappings.0.location }}">
+            </div>
+            <div class="form-group">
+                <label for="assembly_name">Assembly Name:</label>
+                <input type="text" class="form-control" id="assembly_name" name="assembly_name" value="{{ variant.mappings.0.assembly_name }}">
+            </div>
+            <div class="form-group">
+                <label for="end">End:</label>
+                <input type="number" class="form-control" id="end" name="end" value="{{ variant.mappings.0.end }}">
+            </div>
+            <div class="form-group">
+                <label for="seq_region_name">Seq Region Name:</label>
+                <input type="text" class="form-control" id="seq_region_name" name="seq_region_name" value="{{ variant.mappings.0.seq_region_name }}">
+            </div>
+            <div class="form-group">
+                <label for="strand">Strand:</label>
+                <input type="number" class="form-control" id="strand" name="strand" value="{{ variant.mappings.0.strand }}">
+            </div>
+            <div class="form-group">
+                <label for="allele_string">Allele String:</label>
+                <input type="text" class="form-control" id="allele_string" name="allele_string" value="{{ variant.mappings.0.allele_string }}">
+            </div>
+            <div class="form-group">
+                <label for="start">Start:</label>
+                <input type="number" class="form-control" id="start" name="start" value="{{ variant.mappings.0.start }}">
+            </div>
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" class="form-control" id="name" name="name" value="{{ variant.name }}">
+            </div>
+            <div class="form-group">
+                <label for="maf">MAF:</label>
+                <input type="text" class="form-control" id="maf" name="maf" value="{{ variant.MAF }}">
+            </div>
+            <div class="form-group">
+                <label for="ambiguity">Ambiguity:</label>
+                <input type="text" class="form-control" id="ambiguity" name="ambiguity" value="{{ variant.ambiguity }}">
+            </div>
+            <div class="form-group">
+                <label for="var_class">Var Class:</label>
+                <input type="text" class="form-control" id="var_class" name="var_class" value="{{ variant.var_class }}">
+            </div>
+            <div class="form-group">
+                <label for="synonyms">Synonyms:</label>
+                <input type="text" class="form-control" id="synonyms" name="synonyms" value="{{ variant.synonyms|join:', ' }}">
+            </div>
+            <div class="form-group">
+                <label for="evidence">Evidence:</label>
+                <input type="text" class="form-control" id="evidence" name="evidence" value="{{ variant.evidence|join:', ' }}">
+            </div>
+            <div class="form-group">
+                <label for="ancestral_allele">Ancestral Allele:</label>
+                <input type="text" class="form-control" id="ancestral_allele" name="ancestral_allele" value="{{ variant.ancestral_allele }}">
+            </div>
+            <div class="form-group">
+                <label for="minor_allele">Minor Allele:</label>
+                <input type="text" class="form-control" id="minor_allele" name="minor_allele" value="{{ variant.minor_allele }}">
+            </div>
+            <div class="form-group">
+                <label for="most_severe_consequence">Most Severe Consequence:</label>
+                <input type="text" class="form-control" id="most_severe_consequence" name="most_severe_consequence" value="{{ variant.most_severe_consequence }}">
+            </div>
+            <input type="submit" value="Save Changes" class="btn btn-primary">
+        </form>
+    </div>
+
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
