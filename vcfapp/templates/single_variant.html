@@ -1,9 +1,26 @@
 {% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block content %}
-{% load crispy_forms_tags %}
-  <form method="post">{% csrf_token %}
-    {{ form|crispy }}
-    <button type="submit" class="btn btn-success">Save variant</button>
-    </form>
-{% endblock %}
+<head>
+</head>
+
+<body>
+  {% block content %}
+  {% load crispy_forms_tags %}
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-8">
+        <h1 class="mt-2">Add a variant to the database</h1>
+        <hr class="mt-0 mb-4">
+        <form method="post">{% csrf_token %}
+          {{ form|crispy }}
+          <button type="submit" class="btn btn-success">Save variant</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% endblock %}
+</body>
+
+</html>

@@ -3,20 +3,7 @@
 {% block content %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Variant DB</title>
-    <!-- Bootstrap CSS CDN -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <!-- DataTables CSS -->
-    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-    <!-- DataTables JS -->
-    <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <!-- Include jQuery Library as you have it already -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    {% load static %}
-    <link rel="shortcut icon" href="{% static 'favicon-32x32.png' %}"/>
-</head>
+
 <body>
     <div class="container"><p></p>
         <h1>Variants Table</h1>
@@ -195,5 +182,6 @@
             });
         }
     </script>
+{% endblock %}
 </body>
 </html>
