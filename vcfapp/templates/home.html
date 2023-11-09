@@ -17,6 +17,8 @@
                     <button type="submit" class="btn btn-primary">Search</button><p></p>
                 </form>
             </div>
+        <a class="btn btn-primary" href="javascript:void(0);" onclick="openGraphPopup()">Query Summary Graph</a>
+        <p></p>
         <div class="table-responsive">
             <table id="variantsTable" class="table table-bordered">
                 <thead>
@@ -119,7 +121,12 @@
                 {% endif %}
             </ul>
         </nav>
+        <p></p>
+        <div id="bottom">
+            <a class="btn btn-primary" href="#top">Back to top</a>
+        </div>
     </div>
+
 
 
 
@@ -182,6 +189,26 @@
             });
         }
     </script>
+
+    <!-- pop out window show visual summary of query results -->
+    <script>
+        function openGraphPopup() {
+            // Get the values from the text boxes
+            // var startValue = document.getElementById('start_range').value;
+            // var endValue = document.getElementById('end_range').value;
+
+            var startValue = 130830186
+            var endValue = 130830237
+
+            // Build the URL with the dynamic start and end values
+            var url = 'visual-summary-query/' + startValue + '/' + endValue + '/';
+
+            // Open the popup window with the dynamic URL
+            window.open(url, 'Query Visual Summary', 'width=1200,height=800');
+        }
+    </script>
+
+
 {% endblock %}
 </body>
 </html>

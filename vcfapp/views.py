@@ -257,3 +257,42 @@ def upload(request):
         form = UploadForm()
 
     return render(request, 'upload.html', {'form': form})
+
+def visual_summary_query(request, start_range, end_range):
+    # Connect to the MongoDB database
+    db = helper.connect_to_database()
+    collection = db['variants']
+
+    # query using values from start/end range text boxes
+    query = {
+        'mappings.start': {
+            '$gte': int(start_range),
+            '$lte': int(end_range)
+        }
+    }
+
+    # Run query
+    results = collection.find(query)
+
+    # Create a dictionary of consequence and their frequencies
+    consequence_counts = {}
+    for result in results:
+        consequence = result['most_severe_consequence']
+        if consequence not in consequence_counts:
+            consequence_counts[consequence] = 1
+        elif consequence in consequence_counts:
+            consequence_counts[consequence] += 1
+
+    # Create data lists for pie chart
+    labels = []
+    counts = []
+    for label, count in consequence_counts.items():
+        labels.append(label)
+        counts.append(count)
+
+    context = {
+        'labels': labels,
+        'counts': counts,
+    }
+
+    return render(request, 'visual_summary_query.html', context)
