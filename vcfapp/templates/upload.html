@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div >
+    <div>
+        <h2>Bulk Upload</h2>
+    </div>
+    <hr>
+    <p><i>Upload variants.json file</i></p>
+    <p><u>Format</u></p>
+    <p>Single line per record e.g.</p>
+    <p>{"source":"User upload","mappings":[{"location":"1:1234-5678","assembly_name":"GRCh38","end":5678,"seq_region_name":"1","strand":1,"coord_system":"chromosome","allele_string":"G/A","start":1234}],"name":"rs536822784","MAF":"0.000199681","ambiguity":"R","var_class":"SNP","synonyms":["NM_007313.2:c.137-23972G>A"],"evidence":["Frequency","1000Genomes"],"ancestral_allele":"G","minor_allele":"A","most_severe_consequence":"intron_variant"}</p>
+    <hr>
+    <br>  
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form}}
+        <button type="submit">Upload</button>
+    </form>
+    <hr>
+</div>
+
+{% endblock content %}
