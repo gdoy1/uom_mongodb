@@ -1,4 +1,5 @@
 from django.core.paginator import Paginator
+from django.contrib import messages
 from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 from pymongo import MongoClient
@@ -179,8 +180,7 @@ def add_individual_data_view(request):
     db = helper.connect_to_database()
     collection = db['variants']
 
-    context = {}
-    context['form'] = SingleVariantForm()
+    form = SingleVariantForm()
     if request.POST:
         form = SingleVariantForm(request.POST)
         if form.is_valid():
@@ -222,33 +222,33 @@ def add_individual_data_view(request):
                 "evidence": form.cleaned_data['evidence']
             }
 
-            print(json_to_insert)
-
             collection.insert_one(
                 json_to_insert
             )
+            messages.success(request, 'Variant submitted successfully!')
             form = SingleVariantForm()
             return HttpResponseRedirect(reverse('add-individual-var'))
     else:
         form = SingleVariantForm()
 
-    return render(request, "single_variant.html", context)
+    return render(request, "single_variant.html", {'form': form})
+
 
 def upload(request):
     # Connect to the MongoDB database
     db = helper.connect_to_database()
     collection = db['variants']
 
-    if request.method == 'POST':        
+    if request.method == 'POST':
         form = UploadForm(request.POST, request.FILES)
         if form.is_valid():
             upload_file = request.FILES['file'].file.getvalue()
             for line in upload_file.decode('utf-8').split('\n'):
                 if line.strip():
                     json_data = json.loads(line)
-                    collection.insert_one(json_data)  
-                    form = UploadForm()                         
+                    collection.insert_one(json_data)
+                    form = UploadForm()
     else:
         form = UploadForm()
-        
-    return render(request, 'upload.html', {'form': form}) 
+
+    return render(request, 'upload.html', {'form': form})

@@ -17,6 +17,15 @@
           {{ form|crispy }}
           <button type="submit" class="btn btn-success">Save variant</button>
         </form>
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li class="{{ message.tags }}">
+                    {{ message|safe }}
+                </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
       </div>
     </div>
   </div>

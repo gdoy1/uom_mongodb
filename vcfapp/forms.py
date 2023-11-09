@@ -173,6 +173,8 @@ class SingleVariantForm(forms.Form):
         assembly = self.cleaned_data['assembly']
         chromosome = self.cleaned_data['chromosome']
 
+        start = self.cleaned_data['start']
+        end = self.cleaned_data['end']
         strand = self.cleaned_data['strand']
         maf = self.cleaned_data['maf']
         ambiguity = self.cleaned_data['ambiguity']
@@ -211,6 +213,15 @@ class SingleVariantForm(forms.Form):
         if not evidence:
             self.cleaned_data['evidence'] = None
 
+        is_unique = helper.check_single_variant_unique(
+            assembly, chromosome, start, end,
+            ancestral_allele, minor_allele
+        )
+
+        print("Is variant unique?", is_unique)
+        if is_unique != True:
+            raise ValidationError(is_unique)
+
         return self.cleaned_data
 
 
@@ -235,5 +246,5 @@ class UploadForm(forms.Form):
                         raise ValidationError(upload_correct)
                 except JSONDecodeError:
                     raise ValidationError(f'Incorrect JSON format...\n{line}')
-                
+
 

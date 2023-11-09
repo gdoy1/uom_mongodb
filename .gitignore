@@ -1,6 +1,6 @@
 *.pyc
 *.json
 redundant.txt
-vcfapp/__pycache__
-vcfapp/migrations
-vcfparser/__pycache__
+vcfapp/__pycache__/*
+vcfapp/migrations/*
+vcfparser/__pycache__/*
