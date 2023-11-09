@@ -11,3 +11,4 @@ typing_extensions==4.8.0
 pandas
 retrying
 django-crispy-forms
+crispy-bootstrap4
