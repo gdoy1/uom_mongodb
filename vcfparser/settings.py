@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+
+# Define Docker IP using environment variable
+DOCKER_IP = os.environ['UOM_DOCKER_IP']
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -94,7 +98,7 @@ DATABASES = {
         'NAME': 'mydatabase',  # Use the name of your MongoDB database
         'ENFORCE_SCHEMA': False,
         'CLIENT': {
-            'host': 'mongodb://172.17.0.2:27017',  # Use the IP address of your MongoDB container
+            'host': DOCKER_IP,  # Use the IP address of your MongoDB container
         }
     }
 }
