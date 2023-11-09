@@ -76,6 +76,18 @@ WSGI_APPLICATION = "vcfparser.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'djongo',
+#        'NAME': 'your_db_name',  # Use the name of your MongoDB database
+#        'ENFORCE_SCHEMA': False,
+#        'CLIENT': {
+#            'host': 'mongodb://172.17.0.3:27017',  # Use the IP address of your MongoDB container
+#        }
+#    }
+#}
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',

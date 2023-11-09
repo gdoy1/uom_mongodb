@@ -1,24 +1,72 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <title>Add variants</title>
-  </head>
-  <body>
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-8">
-          <h1 class="mt-2">Add a variant to the database</h1>
-          <hr class="mt-0 mb-4">
+    <title>Variant Database</title>
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <!-- Datatables CDNs -->
+    <link rel="stylesheet" href="//cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+    <script src="//cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.13.7/dataRender/ellipsis.js"></script>
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <!-- DataTables JS -->
+    <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <!-- Include jQuery Library as you have it already -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="shortcut icon" href="{% static 'favicon-32x32.png' %}"/>
+</head>
 
-{% load crispy_forms_tags %}
-{% block content %}
-{% endblock %}
 
-</div>
-</div>
-</div>
+<body>
+    {% load crispy_forms_tags %}
+    <div>
+        <div> <!-- navbar add-individual-var  -->
+            {% block navbar %}
+            <nav class="navbar navbar-expand-lg navbar-dark py-0" style="background-color:#4ca463 ;">
+                <div class="container-fluid">
+                    <a class="navbar-brand fs-3" id="navbar-logo" href="{% url 'home' %}">Variant DB</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                        <ul class="navbar-nav mx-auto">
+                            <li id="link-home" class="nav-item">
+                                <a id='home' class="nav-link {% if nbar == 'home' %}active{% endif %}"
+                                    aria-current="page" href="{% url 'home' %}">Query Variants</a>
+                            </li>
+                            <li id ="link-add-individual-var" class="nav-item">
+                                <a id='add-individual-var' class="nav-link" href="{% url 'add-individual-var' %}">Add Variant</a>
+                            </li>
+                            <li id ="link-upload" class="nav-item">
+                                <a id='upload' class="nav-link" href="{% url 'upload' %}">Bulk Upload</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'visual-summary' %}">Visual summary</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            {% endblock %}
+        </div>
+        <div id="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+
 </body>
 </html>

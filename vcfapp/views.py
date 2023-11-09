@@ -1,14 +1,16 @@
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
-from django.shortcuts import render, redirect
+from pymongo import MongoClient
 from bson import ObjectId, regex
+from django.shortcuts import render, redirect
 import json
 from json.decoder import JSONDecodeError
 from .forms import SingleVariantForm, UploadForm
 from .utils import VcfAppUtils
 
 helper = VcfAppUtils()
+
 
 def home(request):
     # Connect to the MongoDB database

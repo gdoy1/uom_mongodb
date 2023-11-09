@@ -1,45 +1,10 @@
+{% extends 'base.html' %}
 {% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Variant database</title>
-    <!-- Bootstrap CSS CDN -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <!-- DataTables CSS -->
-    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-    <!-- DataTables JS -->
-    <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <!-- Include jQuery Library as you have it already -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    {% load static %}
-    <link rel="shortcut icon" href="{% static 'favicon-32x32.png' %}"/>
-</head>
-<body> 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="{% url 'home' %}">Variant DB</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'home' %}">Table <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="">Add Variant</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="">Batch Upload</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'visual-summary' %}">Visual summary</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>    
+
+<body>
     <div class="container"><p></p>
         <h1>Variants Table</h1>
             <div class="search-form">
@@ -105,7 +70,7 @@
                                 <img src="{% static 'loading.gif' %}" style="display: none; width: 35%; height: auto;" class="loading-gif" />
                                 <button type="button" class="btn btn-success btn-sm" onclick="getClassification('{{ variant.name }}', this)">
                                     Classify
-                                </button><p></p>                            
+                                </button><p></p>
                                 <form action="{% url 'delete_variant' variant.id %}" method="post">
                                     {% csrf_token %}
                                     <input type="submit" value="Delete" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this record?');">
@@ -131,7 +96,7 @@
                         </a>
                     </li>
                 {% endif %}
-                
+
                 {% for num in page_range %}
                     {% if num <= current_page|add:5 and num >= current_page|add:-5 %}
                         <li class="page-item {% if num == current_page %}active{% endif %}">
@@ -139,7 +104,7 @@
                         </li>
                     {% endif %}
                 {% endfor %}
-                
+
                 {% if current_page < total_pages %}
                     <li class="page-item">
                         <a class="page-link" href="?page={{ current_page|add:1 }}" aria-label="Next">
@@ -153,7 +118,7 @@
                     </li>
                 {% endif %}
             </ul>
-        </nav>               
+        </nav>
     </div>
 
 
@@ -172,21 +137,32 @@
         $('#variantsTable').DataTable({
             "pagingType": "simple_numbers",
             "ordering": true,
+            "columnDefs": [ {
+                "targets": 0,
+                "render": DataTable.render.ellipsis( 17, true )
+              } ],
+            "scrollCollapse": false,
+            "scrollY": '50vh',
+            "scrollX": true,
+            "info": false,
+            "searching": false,
+            "order": [[0, "asc"]],
+            "responsive": true,
         });
     });
     </script>
-    </script>    
+
     <script>
         function getClassification(variantName, button) {
             // Find the loading GIF image next to the button and show it
             const loadingGif = $(button).siblings('.loading-gif');
             loadingGif.show();
-            
+
             // Disable the button
             button.disabled = true;
-    
+
             const url = `https://rest.ensembl.org/vep/human/id/${variantName}?content-type=application/json`;
-    
+
             $.ajax({
                 url: url,
                 type: 'GET',
@@ -205,6 +181,7 @@
                 }
             });
         }
-    </script>        
+    </script>
+{% endblock %}
 </body>
 </html>
