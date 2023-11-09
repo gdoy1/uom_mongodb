@@ -3,7 +3,6 @@ from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 from django.shortcuts import render, redirect
 from bson import ObjectId, regex
-from pymongo import MongoClient
 import json
 from json.decoder import JSONDecodeError
 from .forms import SingleVariantForm, UploadForm
