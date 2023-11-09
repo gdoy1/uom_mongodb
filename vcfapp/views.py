@@ -232,10 +232,14 @@ def add_individual_data_view(request):
                 "evidence": form.cleaned_data['evidence']
             }
 
-            collection.insert_one(
+            inserted = collection.insert_one(
                 json_to_insert
             )
-            messages.success(request, 'Variant submitted successfully!')
+            doc_id = inserted.inserted_id
+            messages.success(
+                request,
+                f'Variant submitted successfully! Inserted object ID: {doc_id}'
+            )
             form = SingleVariantForm()
             return HttpResponseRedirect(reverse('add-individual-var'))
     else:
