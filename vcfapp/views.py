@@ -1,15 +1,18 @@
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
-from pymongo import MongoClient
-from bson import ObjectId, regex
 from django.shortcuts import render, redirect
-from .forms import SingleVariantForm
+from bson import ObjectId, regex
+import json
+from json.decoder import JSONDecodeError
+from .forms import SingleVariantForm, UploadForm
+from .utils import VcfAppUtils
+
+helper = VcfAppUtils()
 
 def home(request):
-    # Connect to MongoDB
-    client = MongoClient('mongodb://localhost:27017/')
-    db = client['mydatabase']
+    # Connect to the MongoDB database
+    db = helper.connect_to_database()
     collection = db['variants']
 
     # Get the search term from the GET request
@@ -72,8 +75,8 @@ def home(request):
 
 def delete_variant(request, id):
     if request.method == "POST":
-        client = MongoClient('mongodb://localhost:27017/')
-        db = client['mydatabase']
+        # Connect to the MongoDB database
+        db = helper.connect_to_database()
         collection = db['variants']
         collection.delete_one({'_id': ObjectId(id)})
         return HttpResponseRedirect(reverse('home'))
@@ -83,8 +86,8 @@ def delete_variant(request, id):
 # Other imports ...
 
 def modify_variant(request, id):
-    client = MongoClient('mongodb://localhost:27017/')
-    db = client['mydatabase']
+    # Connect to the MongoDB database
+    db = helper.connect_to_database()
     collection = db['variants']
     variant = collection.find_one({'_id': ObjectId(id)})
     if variant is None:
@@ -146,8 +149,8 @@ def modify_variant(request, id):
         return render(request, 'modify_variant.html', {'variant': variant})
 
 def visual_summary(request):
-    client = MongoClient('mongodb://localhost:27017/')
-    db = client['mydatabase']
+    # Connect to the MongoDB database
+    db = helper.connect_to_database()
     collection = db['variants']
 
     # Aggregate the counts for each type of most_severe_consequence
@@ -170,8 +173,8 @@ def visual_summary(request):
 
 
 def add_individual_data_view(request):
-    client = MongoClient('mongodb://localhost:27017/')
-    db = client['mydatabase']
+    # Connect to the MongoDB database
+    db = helper.connect_to_database()
     collection = db['variants']
 
     context = {}
@@ -228,3 +231,22 @@ def add_individual_data_view(request):
         form = SingleVariantForm()
 
     return render(request, "single_variant.html", context)
+
+def upload(request):
+    # Connect to the MongoDB database
+    db = helper.connect_to_database()
+    collection = db['variants']
+
+    if request.method == 'POST':        
+        form = UploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            upload_file = request.FILES['file'].file.getvalue()
+            for line in upload_file.decode('utf-8').split('\n'):
+                if line.strip():
+                    json_data = json.loads(line)
+                    collection.insert_one(json_data)  
+                    form = UploadForm()                         
+    else:
+        form = UploadForm()
+        
+    return render(request, 'upload.html', {'form': form}) 
