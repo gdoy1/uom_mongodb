@@ -250,6 +250,12 @@ def visual_summary_query(request, search1, search2, chr, start_range, end_range)
     db = helper.connect_to_database()
     collection = db['variants']
 
+    if search1 == 'None': search1 = ''
+    if search2 == 'None': search2 = ''
+    if chr == 'None': chr = ''
+    if start_range == 'None': start_range = ''
+    if end_range == 'None': end_range = ''
+
     # call search query function
     results = helper.querying_logic(
         search_term1=search1,
