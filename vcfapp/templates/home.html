@@ -6,13 +6,36 @@
 
 <body>
     <div class="container"><p></p>
-        <h1>Variants Table</h1>
+        <h1><i class="bi-search"></i> Variants Table</h1>
+        <div>
+            <div class="card bg-light mb-3" style="max-width: 18rem;">
+                <div class="card-header">
+                    <h5> Total Variants
+                    <div class="icon">
+                        <img src="{% static '/table.svg' %}" alt="My image" >
+                    </div>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <h2 class="timer count-title count-number" data-to="{{ total_items }}" data-speed="1500" style=""></h2>
+                  <p class="card-text"></p>
+                </div>
+            </div>
+        </div>
             <div class="search-form">
                 <!-- Search form -->
                 <form method="get" action="{% url 'home' %}">
                     <div class="form-group">
-                        <label for="search_term">Search Term:</label>
-                        <input type="text" id="search_term" name="search" value="{{ request.GET.search }}" class="form-control" placeholder="Enter search term">
+                        <label for="search_term1">Search Term 1:</label>
+                        <input type="text" id="search_term1" name="search1" value="{{ request.GET.search1 }}" class="form-control" placeholder="Enter search term">
+                    </div>
+                    <div class="form-group">
+                        <label for="search_term2">Search Term 2:</label>
+                        <input type="text" id="search_term2" name="search2" value="{{ request.GET.search2 }}" class="form-control" placeholder="Enter search term 2">
+                    </div>
+                    <div class="form-group">
+                        <label for="Chromosome">Chromosome</label>
+                        <input type="text" id="chromosome" name="chromosome" value="{{ request.GET.chromosome }}" class="form-control" placeholder="Enter chromosome, i.e. 1">
                     </div>
                     <div class="form-group">
                         <label for="start_range">Start Range:</label>
@@ -23,7 +46,6 @@
                         <input type="number" id="end_range" name="end_range" value="{{ request.GET.end_range }}" class="form-control" placeholder="Enter end range">
                     </div>
                     <button type="submit" class="btn btn-primary">Search</button><p></p>
-                    <button type="submit" class="btn btn-primary" name="search_range" value="true">Search Range</button><p></p>
                 </form>
             </div>
         <!-- Summary graph of query -->
@@ -166,7 +188,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 
     <!-- Load DataTables -->
-    <script type="text/javascript" charset="utf8" 
+    <script type="text/javascript" charset="utf8"
             src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 
     <!-- Initialize DataTables and Toggle Columns Script -->
@@ -248,8 +270,6 @@
             });
         }
     </script>
-<<<<<<< HEAD
-
     <!-- pop out window show visual summary of query results -->
     <script>
         function openGraphPopup() {
@@ -271,7 +291,6 @@
         }
     </script>
 
-=======
     <script>
         function alphaMissense(chrom, pos, ref, alt) {
             // Construct the URL
@@ -280,8 +299,108 @@
             // Open a new popup window with specified width and height
             window.open(url, '_blank', 'width=800,height=600,left=200,top=200');
         }
-    </script>         
->>>>>>> origin/george_dev_v2
+    </script>
+
+    <script>
+        (function ($) {
+            $.fn.countTo = function (options) {
+                options = options || {};
+
+                return $(this).each(function () {
+                    // set options for current element
+                    var settings = $.extend({}, $.fn.countTo.defaults, {
+                        from:            $(this).data('from'),
+                        to:              $(this).data('to'),
+                        speed:           $(this).data('speed'),
+                        refreshInterval: $(this).data('refresh-interval'),
+                        decimals:        $(this).data('decimals')
+                    }, options);
+
+                    // how many times to update the value, and how much to increment the value on each update
+                    var loops = Math.ceil(settings.speed / settings.refreshInterval),
+                        increment = (settings.to - settings.from) / loops;
+
+                    // references & variables that will change with each update
+                    var self = this,
+                        $self = $(this),
+                        loopCount = 0,
+                        value = settings.from,
+                        data = $self.data('countTo') || {};
+
+                    $self.data('countTo', data);
+
+                    // if an existing interval can be found, clear it first
+                    if (data.interval) {
+                        clearInterval(data.interval);
+                    }
+                    data.interval = setInterval(updateTimer, settings.refreshInterval);
+
+                    // initialize the element with the starting value
+                    render(value);
+
+                    function updateTimer() {
+                        value += increment;
+                        loopCount++;
+
+                        render(value);
+
+                        if (typeof(settings.onUpdate) == 'function') {
+                            settings.onUpdate.call(self, value);
+                        }
+
+                        if (loopCount >= loops) {
+                            // remove the interval
+                            $self.removeData('countTo');
+                            clearInterval(data.interval);
+                            value = settings.to;
+
+                            if (typeof(settings.onComplete) == 'function') {
+                                settings.onComplete.call(self, value);
+                            }
+                        }
+                    }
+
+                    function render(value) {
+                        var formattedValue = settings.formatter.call(self, value, settings);
+                        $self.html(formattedValue);
+                    }
+                });
+            };
+
+            $.fn.countTo.defaults = {
+                from: 0,               // the number the element should start at
+                to: 0,                 // the number the element should end at
+                speed: 1000,           // how long it should take to count between the target numbers
+                refreshInterval: 100,  // how often the element should be updated
+                decimals: 0,           // the number of decimal places to show
+                formatter: formatter,  // handler for formatting the value before rendering
+                onUpdate: null,        // callback method for every time the element is updated
+                onComplete: null       // callback method for when the element finishes updating
+            };
+
+            function formatter(value, settings) {
+                return value.toFixed(settings.decimals);
+            }
+        }(jQuery));
+
+        jQuery(function ($) {
+          // custom formatting example
+          $('.count-number').data('countToOptions', {
+            formatter: function (value, options) {
+              return value.toFixed(options.decimals).replace(/\B(?=(?:\d{3})+(?!\d))/g, ',');
+            }
+          });
+
+          // start all the timers
+          $('.timer').each(count);
+
+          function count(options) {
+            var $this = $(this);
+            options = $.extend({}, options || {}, $this.data('countToOptions') || {});
+            $this.countTo(options);
+          }
+        });
+    </script>
 {% endblock %}
 </body>
 </html>
