@@ -15,7 +15,6 @@ Clone the repo and install the requirements using requirements.txt:
 cd uom_mongodb
 pip install -r requirements.txt
 ```
-
 Pull the official MongoDB Docker image from [DockerHub](https://hub.docker.com/_/mongo):
 ```
 docker pull mongo
