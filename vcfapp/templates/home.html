@@ -5,52 +5,69 @@
 <html lang="en">
 
 <body>
-    <div class="container"><p></p>
+    <div class="container">
         <h1><i class="bi-search"></i> Variants Table</h1>
-        <div>
-            <div class="card bg-light mb-3" style="max-width: 18rem;">
-                <div class="card-header">
-                    <h5> Total Variants
-                    <div class="icon">
-                        <img src="{% static '/table.svg' %}" alt="My image" >
-                    </div>
-                    </h5>
+        <div class="card bg-light mb-3" style="max-width: 18rem;">
+            <div class="card-header">
+                <h5> Total Variants
+                <div class="icon">
+                    <img src="{% static '/table.svg' %}" alt="My image">
                 </div>
-                <div class="card-body">
-                    <h2 class="timer count-title count-number" data-to="{{ total_items }}" data-speed="1500" style=""></h2>
-                  <p class="card-text"></p>
-                </div>
+                </h5>
+            </div>
+            <div class="card-body">
+                <h2 class="timer count-title count-number" data-to="{{ total_items }}" data-speed="1500"></h2>
+                <p class="card-text"></p>
             </div>
         </div>
-            <div class="search-form">
+        
+        <div class="card my-4">
+            <div class="card-header" style="background-color: #f8f9fa;">
+                <strong>Search:</strong>
+            </div>
+            <div class="card-body">
                 <!-- Search form -->
                 <form method="get" action="{% url 'home' %}">
-                    <div class="form-group">
-                        <label for="search_term1">Search Term 1:</label>
-                        <input type="text" id="search_term1" name="search1" value="{{ request.GET.search1 }}" class="form-control" placeholder="Enter search term">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="search_term1">Term:</label>
+                            <input type="text" id="search_term1" name="search1" value="{{ request.GET.search1 }}" class="form-control" placeholder="Enter search term">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="search_term2">Additional Term (optional):</label>
+                            <input type="text" id="search_term2" name="search2" value="{{ request.GET.search2 }}" class="form-control" placeholder="Enter search term 2">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="search_term2">Search Term 2:</label>
-                        <input type="text" id="search_term2" name="search2" value="{{ request.GET.search2 }}" class="form-control" placeholder="Enter search term 2">
+                    <div class="card my-3">
+                        <div class="card-header">
+                            <strong>Filter by region:</strong>
+                        </div>
+                        <div class="card-body bg-light">
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label for="Chromosome">Chromosome:</label>
+                                    <input type="text" id="chromosome" name="chromosome" value="{{ request.GET.chromosome }}" class="form-control" placeholder="Enter chromosome, i.e., chr1">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="start_range">Start Range:</label>
+                                    <input type="number" id="start_range" name="start_range" value="{{ request.GET.start_range }}" class="form-control" placeholder="Enter start range">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="end_range">End Range:</label>
+                                    <input type="number" id="end_range" name="end_range" value="{{ request.GET.end_range }}" class="form-control" placeholder="Enter end range">
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="Chromosome">Chromosome</label>
-                        <input type="text" id="chromosome" name="chromosome" value="{{ request.GET.chromosome }}" class="form-control" placeholder="Enter chromosome, i.e. 1">
+                    <div class="row">
+                        <div class="col text-center">
+                            <button type="submit" class="btn btn-primary mt-3">Search</button>
+                            <a id="visualSummaryLink" class="btn btn-primary mt-3" href="#" onclick="openGraphPopup()">Query Summary Graph</a>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="start_range">Start Range:</label>
-                        <input type="number" id="start_range" name="start_range" value="{{ request.GET.start_range }}" class="form-control" placeholder="Enter start range">
-                    </div>
-                    <div class="form-group">
-                        <label for="end_range">End Range:</label>
-                        <input type="number" id="end_range" name="end_range" value="{{ request.GET.end_range }}" class="form-control" placeholder="Enter end range">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Search</button><p></p>
                 </form>
             </div>
-        <!-- Summary graph of query -->
-        <a id="visualSummaryLink" class="btn btn-primary" href="javascript:void(0);" onclick="openGraphPopup()">Query Summary Graph</a>
-        <p></p>
+        </div>
 
         {% if messages %}
         <ul class="messages">
@@ -60,17 +77,23 @@
         </ul>
         {% endif %}
 
-        <!-- Checkbox to toggle view -->
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="toggleViewCheckbox">
-            <label class="form-check-label" for="toggleViewCheckbox">
-                Show Full View
-            </label>
-        </div>
-        <!-- Table with toggleable columns -->
+        <!-- Results box -->
+        <div class="card mt-4">
+            <div class="card-header" style="background-color: #CBC3E3;">
+                <strong>Results:</strong>
+            </div>
+            <div class="card-body bg-light">
+                <!-- Checkbox to toggle view -->
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="toggleViewCheckbox">
+                    <label class="form-check-label" for="toggleViewCheckbox">
+                        Show Full View
+                    </label>
+                </div>
 
-        <div class="table-responsive">
-            <table id="variantsTable" class="table table-bordered">
+                <!-- Table with toggleable columns -->
+                <div class="table-responsive">
+                    <table id="variantsTable" class="table table-bordered">
                 <thead>
                     <tr>
                         <th>Source</th>
