@@ -26,7 +26,6 @@
                     <button type="submit" class="btn btn-primary" name="search_range" value="true">Search Range</button><p></p>
                 </form>
             </div>
-
         <!-- Checkbox to toggle view -->
         <div class="form-check">
             <input class="form-check-input" type="checkbox" id="toggleViewCheckbox">
@@ -34,7 +33,6 @@
                 Show Full View
             </label>
         </div>
-
         <!-- Table with toggleable columns -->
         <div class="table-responsive">
             <table id="variantsTable" class="table table-bordered">
@@ -44,16 +42,16 @@
                         <th>Location</th>
                         <th>Assembly Name</th>
                         <th class="toggle-column">End</th>
+                        <th class="toggle-column">Chromosome</th>
+                        <th class="toggle-column">Strand</th>
                         <th>Allele String</th>
+                        <th class="toggle-column">Start</th>
                         <th>Name</th>
                         <th>MAF</th>
-                        <th class="toggle-column">Seq Region Name</th>
-                        <th class="toggle-column">Strand</th>
-                        <th class="toggle-column">Start</th>
+                        <th class="toggle-column">Ambiguity</th>
                         <th>Var Class</th>
                         <th>Synonyms</th>
                         <th>Evidence</th>
-                        <th class="toggle-column">Ambiguity</th>
                         <th class="toggle-column">Ancestral Allele</th>
                         <th class="toggle-column">Minor Allele</th>
                         <th>Most Severe Consequence</th>
@@ -96,15 +94,15 @@
                                 </form>
                                 {% if variant.most_severe_consequence == 'missense_variant' %}
                                 <p></p>
-                                <button class="btn btn-primary alpha-missense-button" 
+                                <button class="btn btn-primary btn-sm alpha-missense-button"
                                 data-chrom="{{ variant.mappings.0.seq_region_name }}" 
                                 data-pos="{{ variant.mappings.0.start }}" 
                                 data-ref="{{ variant.mappings.0.allele_string|slice:":1" }}" 
                                 data-alt="{{ variant.mappings.0.allele_string|slice:"2:" }}" 
                                 onclick="alphaMissense('{{ variant.mappings.0.seq_region_name }}', '{{ variant.mappings.0.start }}', '{{ variant.mappings.0.allele_string|slice:":1" }}', '{{ variant.mappings.0.allele_string|slice:"2:" }}')">
                                     AlphaMissense
-                                </button>                                                                                                
-                        {% endif %}
+                                </button>
+                                {% endif %}
                             </center>
                         </td>
                     </tr>
@@ -165,15 +163,19 @@
 
     <!-- Initialize DataTables and Toggle Columns Script -->
     <script>
-    $(document).ready(function () {
-        // Initialize DataTables and assign the instance to a variable
-        var table = $('#variantsTable').DataTable({
-            "pagingType": "simple_numbers",
-            "ordering": true,
-            "columnDefs": [ {
-                "targets": [3, 7, 8, 9, 13, 14, 15],  // Specify the target columns to be hidden
-                "visible": false  // Set the initial visibility to false
-              } ],
+        $(document).ready(function () {
+            // Initialize DataTables and assign the instance to a variable
+            var table = $('#variantsTable').DataTable({
+                "pagingType": "simple_numbers",
+                "ordering": true,
+                "columnDefs": [
+                    {
+                        // Specify the target columns to be hidden
+                        // Adjust these indexes to match the actual order of your table columns
+                        "targets": [3, 4, 5, 7, 10, 14, 15],
+                        "visible": false
+                    }
+                ],
             "scrollCollapse": false,
             "scrollY": '50vh',
             "scrollX": true,
@@ -185,11 +187,14 @@
 
         // Checkbox event to toggle the view
         $('#toggleViewCheckbox').change(function () {
-            // Get the columns that were initially hidden
-            var toggleColumns = table.columns('.toggle-column');
+            // Use a column class identifier if your columns have a specific class
+            var columnsToToggle = table.columns('.toggle-column');
             // Toggle the visibility based on the checkbox
-            toggleColumns.visible(this.checked);
+            columnsToToggle.visible(this.checked);
         });
+
+        // Initially uncheck the checkbox on page load
+        $('#toggleViewCheckbox').prop('checked', false);
     });
     </script>
     <script>
