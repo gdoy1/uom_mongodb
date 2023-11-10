@@ -319,7 +319,6 @@ class UploadForm(forms.Form):
                                 raise ValidationError(is_unique)
                         except KeyError:
                             raise ValidationError(f'Error... missing field\n{json_data}')
-                        is_unique = helper.is_var_unique(json_data['name'])
                         if is_unique != True:
                             raise ValidationError(is_unique)
                     else:
