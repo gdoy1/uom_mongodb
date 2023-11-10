@@ -1,5 +1,6 @@
 *.pyc
 *.json
+!schema.json
 redundant.txt
 vcfapp/__pycache__/*
 vcfapp/migrations/*

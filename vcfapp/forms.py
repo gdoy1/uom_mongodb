@@ -50,6 +50,28 @@ class SingleVariantForm(forms.Form):
         min_value=0
     )
 
+    ancestral_allele = forms.CharField(
+        label='Ancestral allele',
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Only A, C, T, G or N characters allowed",
+                'pattern':'[ACTGN]+'
+            }
+        )
+    )
+
+    minor_allele = forms.CharField(
+        label='Minor allele',
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Only A, C, T, G or N characters allowed",
+                'pattern':'[ACTGN]+'
+            }
+        )
+    )
+
     strand = forms.ChoiceField(
         required=False,
         label='Strand',
@@ -137,28 +159,6 @@ class SingleVariantForm(forms.Form):
             attrs={
                 "placeholder": "rs1234...",
                 "pattern": "(rs[0-9]+)"
-            }
-        )
-    )
-
-    ancestral_allele = forms.CharField(
-        label='Ancestral allele',
-        required=False,
-        widget=forms.TextInput(
-            attrs={
-                "placeholder": "A, C, T, G or N",
-                'pattern':'[ACTGN]+'
-            }
-        )
-    )
-
-    minor_allele = forms.CharField(
-        label='Minor allele',
-        required=False,
-        widget=forms.TextInput(
-            attrs={
-                "placeholder": "A, C, T, G or N",
-                'pattern':'[ACTGN]+'
             }
         )
     )
@@ -273,9 +273,9 @@ class SingleVariantForm(forms.Form):
         if not most_severe_consequence:
             self.cleaned_data['most_severe_consequence'] = None
         if not synonyms:
-            self.cleaned_data['synonyms'] = None
+            self.cleaned_data['synonyms'] = []
         if not evidence:
-            self.cleaned_data['evidence'] = None
+            self.cleaned_data['evidence'] = []
 
         is_unique = helper.check_single_variant_unique(
             assembly, chromosome, start, end,

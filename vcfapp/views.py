@@ -1,12 +1,9 @@
-from django.core.paginator import Paginator
 from django.contrib import messages
 from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
-from pymongo import MongoClient
 from bson import ObjectId, regex
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 import json
-from json.decoder import JSONDecodeError
 from .forms import SingleVariantForm, UploadForm
 from .utils import VcfAppUtils
 
@@ -199,15 +196,11 @@ def add_individual_data_view(request):
                 f"{form.cleaned_data['start']}-"
                 f"{form.cleaned_data['end']}"
             )
-            ancestral_allele = form.cleaned_data['ancestral_allele']
-            minor_allele = form.cleaned_data['minor_allele']
-            if ancestral_allele or minor_allele:
-                allele_string = (
-                    f"{form.cleaned_data['ancestral_allele']}/"
-                    f"{form.cleaned_data['minor_allele']}"
-                )
-            else:
-                allele_string = None
+            ancestral_allele = form.cleaned_data['ancestral_allele'].upper()
+            minor_allele = form.cleaned_data['minor_allele'].upper()
+            allele_string = (
+                f"{ancestral_allele}/{minor_allele}"
+            )
 
             json_to_insert = {
                 "source": "Manual single variant upload",
@@ -227,9 +220,9 @@ def add_individual_data_view(request):
                 }],
                 "ancestral_allele": form.cleaned_data['ancestral_allele'],
                 "minor_allele": form.cleaned_data['minor_allele'],
-                "synonyms": form.cleaned_data['synonyms'],
+                "synonyms": [form.cleaned_data['synonyms']],
                 "most_severe_consequence": form.cleaned_data['most_severe_consequence'],
-                "evidence": form.cleaned_data['evidence']
+                "evidence": [form.cleaned_data['evidence']]
             }
 
             inserted = collection.insert_one(
