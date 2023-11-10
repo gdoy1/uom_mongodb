@@ -150,10 +150,10 @@
                                 {% if variant.most_severe_consequence == 'missense_variant' %}
                                 <p></p>
                                 <button class="btn btn-primary btn-sm alpha-missense-button"
-                                data-chrom="{{ variant.mappings.0.seq_region_name }}" 
-                                data-pos="{{ variant.mappings.0.start }}" 
-                                data-ref="{{ variant.mappings.0.allele_string|slice:":1" }}" 
-                                data-alt="{{ variant.mappings.0.allele_string|slice:"2:" }}" 
+                                data-chrom="{{ variant.mappings.0.seq_region_name }}"
+                                data-pos="{{ variant.mappings.0.start }}"
+                                data-ref="{{ variant.mappings.0.allele_string|slice:":1" }}"
+                                data-alt="{{ variant.mappings.0.allele_string|slice:"2:" }}"
                                 onclick="alphaMissense('{{ variant.mappings.0.seq_region_name }}', '{{ variant.mappings.0.start }}', '{{ variant.mappings.0.allele_string|slice:":1" }}', '{{ variant.mappings.0.allele_string|slice:"2:" }}')">
                                     AlphaMissense
                                 </button>

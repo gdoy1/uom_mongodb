@@ -163,6 +163,42 @@ class VcfAppUtils:
             message = "ERROR - Chromosome and range not formatted correctly"
             messages.error(request, message)
             filtered_variants_cursor = collection.find()
+        elif search_term1 and search_term2:
+            regex_query = regex.Regex(search_term1, "i")  # 'i' for case-insensitive
+            query1 = {
+                "$or": [
+                    {"source": regex_query},
+                    {"mappings.location": regex_query},
+                    {"mappings.assembly_name": regex_query},
+                    {"name": regex_query},
+                    {"MAF": regex_query},
+                    {"ambiguity": regex_query},
+                    {"var_class": regex_query},
+                    {"synonyms": regex_query},
+                    {"evidence": regex_query},
+                    {"ancestral_allele": regex_query},
+                    {"minor_allele": regex_query},
+                    {"most_severe_consequence": regex_query},
+                ]
+            }
+            regex_query2 = regex.Regex(search_term2, "i")  # 'i' for case-insensitive
+            query2 = {
+                "$or": [
+                    {"source": regex_query2},
+                    {"mappings.location": regex_query2},
+                    {"mappings.assembly_name": regex_query2},
+                    {"name": regex_query2},
+                    {"MAF": regex_query2},
+                    {"ambiguity": regex_query2},
+                    {"var_class": regex_query2},
+                    {"synonyms": regex_query2},
+                    {"evidence": regex_query2},
+                    {"ancestral_allele": regex_query2},
+                    {"minor_allele": regex_query2},
+                    {"most_severe_consequence": regex_query2},
+                ]
+            }
+            filtered_variants_cursor = collection.find({"$and": [query1, query2]})
         elif start_range and end_range and (search_term1 or search_term2):
             # Construct a regex query that searches all fields
             if search_term1:
