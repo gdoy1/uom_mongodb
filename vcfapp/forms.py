@@ -230,10 +230,10 @@ class UploadForm(forms.Form):
                     if upload_correct:
                         is_unique = helper.is_var_unique(json_data['name'])
                         if is_unique != True:
-                            raise ValidationError(is_unique) 
+                            raise ValidationError(is_unique)
                     else:
                         raise ValidationError(upload_correct)
                 except JSONDecodeError:
                     raise ValidationError(f'Incorrect JSON format...\n{line}')
-                
+
 

@@ -18,14 +18,111 @@ def home(request):
     collection = db['variants']
 
     # Get the search term and range from the GET request
-    search_term = request.GET.get('search', '')
+    search_term1 = request.GET.get('search1', '')
+    search_term2 = request.GET.get('search2', '')
+    chromosome = request.GET.get('chromosome', '')
     start_range = request.GET.get('start_range', '')
     end_range = request.GET.get('end_range', '')
 
     # Initialize the query
-    if search_term:
+    if search_term1 and search_term2 and (start_range and end_range and chromosome):
+        regex_query = regex.Regex(search_term1, 'i')  # 'i' for case-insensitive
+        query1 = {
+            '$or': [
+                {'source': regex_query},
+                {'mappings.location': regex_query},
+                {'mappings.assembly_name': regex_query},
+                {'name': regex_query},
+                {'MAF': regex_query},
+                {'ambiguity': regex_query},
+                {'var_class': regex_query},
+                {'synonyms': regex_query},
+                {'evidence': regex_query},
+                {'ancestral_allele': regex_query},
+                {'minor_allele': regex_query},
+                {'most_severe_consequence': regex_query}
+            ]
+        }
+        regex_query2 = regex.Regex(search_term2, 'i')  # 'i' for case-insensitive
+        query2 = {
+            '$or': [
+                {'source': regex_query2},
+                {'mappings.location': regex_query2},
+                {'mappings.assembly_name': regex_query2},
+                {'name': regex_query2},
+                {'MAF': regex_query2},
+                {'ambiguity': regex_query2},
+                {'var_class': regex_query2},
+                {'synonyms': regex_query2},
+                {'evidence': regex_query2},
+                {'ancestral_allele': regex_query2},
+                {'minor_allele': regex_query2},
+                {'most_severe_consequence': regex_query2}
+            ]
+        }
+        query3 = {
+            '$and' : [
+                {'mappings.seq_region_name': chromosome},
+                {'mappings.start': {
+                    '$gte': int(start_range),
+                    '$lte': int(end_range)
+                }}]
+        }
+        filtered_variants_cursor = collection.find({'$and': [query1, query2, query3]})
+    elif search_term1 and search_term2 and (start_range or end_range or chromosome):
+        print("error - missing range")
+    elif start_range and end_range and (search_term1 or search_term2):
         # Construct a regex query that searches all fields
-        regex_query = regex.Regex(search_term, 'i')  # 'i' for case-insensitive
+        if search_term1:
+            regex_query = regex.Regex(search_term1, 'i')  # 'i' for case-insensitive
+        elif search_term2:
+            regex_query = regex.Regex(search_term2, 'i')
+        else:
+            print("ERROR")
+        query1 = {
+            '$or': [
+                {'source': regex_query},
+                {'mappings.location': regex_query},
+                {'mappings.assembly_name': regex_query},
+                {'name': regex_query},
+                {'MAF': regex_query},
+                {'ambiguity': regex_query},
+                {'var_class': regex_query},
+                {'synonyms': regex_query},
+                {'evidence': regex_query},
+                {'ancestral_allele': regex_query},
+                {'minor_allele': regex_query},
+                {'most_severe_consequence': regex_query}
+            ]
+        }
+        # Construct a query that filters by start range
+        query2 = {
+            '$and' : [{'mappings.seq_region_name': chromosome},
+            {'mappings.start': {
+                '$gte': int(start_range),
+                '$lte': int(end_range)
+            }}]
+        }
+        filtered_variants_cursor = collection.find({'$and': [query1, query2]})
+        #filtered_variants_cursor = collection.find(query)
+    elif start_range and end_range and chromosome:
+        # Construct a query that filters by start range
+        query = {
+            '$and' : [{'mappings.seq_region_name': chromosome},
+            {'mappings.start': {
+                '$gte': int(start_range),
+                '$lte': int(end_range)
+            }}]
+        }
+        filtered_variants_cursor = collection.find(query) # collection.find(query2)
+    elif search_term1 or search_term2:
+        # Construct a regex query that searches all fields
+        if search_term1:
+            regex_query = regex.Regex(search_term1, 'i')  # 'i' for case-insensitive
+        elif search_term2:
+            regex_query = regex.Regex(search_term2, 'i')
+        else:
+            print("ERROR")
         query = {
             '$or': [
                 {'source': regex_query},
@@ -42,19 +139,13 @@ def home(request):
                 {'most_severe_consequence': regex_query}
             ]
         }
-    elif start_range and end_range:
         # Construct a query that filters by start range
-        query = {
-            'mappings.start': {
-                '$gte': int(start_range),
-                '$lte': int(end_range)
-            }
-        }
+        filtered_variants_cursor = collection.find(query)
     else:
         query = {}
+        filtered_variants_cursor = collection.find(query)
 
     # Apply the query and get the count for pagination
-    filtered_variants_cursor = collection.find(query)
     total_items = filtered_variants_cursor.count()
 
     # Pagination settings
@@ -81,6 +172,7 @@ def home(request):
         'page_range': page_range,
         'current_page': page_number,
         'total_pages': total_pages,
+        'total_items': total_items,
     }
 
     return render(request, 'home.html', context)
@@ -95,7 +187,6 @@ def delete_variant(request, id):
     else:
         return HttpResponseRedirect(reverse('home'))
 
-# Other imports ...
 
 def modify_variant(request, id):
     # Connect to the MongoDB database
@@ -249,16 +340,16 @@ def upload(request):
     db = helper.connect_to_database()
     collection = db['variants']
 
-    if request.method == 'POST':        
+    if request.method == 'POST':
         form = UploadForm(request.POST, request.FILES)
         if form.is_valid():
             upload_file = request.FILES['file'].file.getvalue()
             for line in upload_file.decode('utf-8').split('\n'):
                 if line.strip():
                     json_data = json.loads(line)
-                    collection.insert_one(json_data)  
-                    form = UploadForm()                         
+                    collection.insert_one(json_data)
+                    form = UploadForm()
     else:
         form = UploadForm()
-        
-    return render(request, 'upload.html', {'form': form}) 
+
+    return render(request, 'upload.html', {'form': form})
