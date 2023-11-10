@@ -187,7 +187,6 @@ def delete_variant(request, id):
     else:
         return HttpResponseRedirect(reverse('home'))
 
-# Other imports ...
 
 def modify_variant(request, id):
     # Connect to the MongoDB database
