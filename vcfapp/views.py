@@ -235,11 +235,9 @@ def upload(request):
                 if line.strip():
                     json_data = json.loads(line)
                     collection.insert_one(json_data)
-            form = UploadForm()
             messages.success(request, 'Upload successful')
         else:
             messages.error(request, 'Upload failed')
-            form = UploadForm()
     else:
         form = UploadForm()
 
