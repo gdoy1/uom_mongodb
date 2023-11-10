@@ -53,15 +53,10 @@
         {% if messages %}
         <ul class="messages">
             {% for message in messages %}
-                <li{% if message.tags %} class="alert alert-danger"{% endif %}>{{ message }}</li>
+                <p {% if message.tags %} class="alert alert-danger"{% endif %}>{{ message }}</p>
             {% endfor %}
         </ul>
         {% endif %}
-        <!--{% for message in messages %}
-            <div class="alert alert-success" role="alert">
-                {{ message }}
-            </div>
-        {% endfor %} -->
 
         <!-- Checkbox to toggle view -->
         <div class="form-check">

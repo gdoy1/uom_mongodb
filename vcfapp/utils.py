@@ -154,6 +154,7 @@ class VcfAppUtils:
             print("error - missing range")
             message = "ERROR - Chromosome and range not formatted correctly"
             messages.error(request, message)
+            filtered_variants_cursor = collection.find()
         elif start_range and end_range and (search_term1 or search_term2):
             # Construct a regex query that searches all fields
             if search_term1:
