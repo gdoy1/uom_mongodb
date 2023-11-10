@@ -169,9 +169,13 @@ def visual_summary(request):
 
     # Aggregate the counts for each type of most_severe_consequence
     pipeline = [
+        {"$match": {"most_severe_consequence": {"$ne": None}}},  # Exclude documents where most_severe_consequence is None
         {"$group": {"_id": "$most_severe_consequence", "count": {"$sum": 1}}}
     ]
     consequences = list(collection.aggregate(pipeline))
+
+    # Exclude entries where '_id' is None
+    consequences = [c for c in consequences if c['_id'] is not None]
 
     # Convert the aggregation result into a format suitable for the charting library
     labels = [consequence['_id'] for consequence in consequences]
@@ -183,8 +187,6 @@ def visual_summary(request):
     }
 
     return render(request, 'visual_summary.html', context)
-
-
 
 def add_individual_data_view(request):
     # Connect to the MongoDB database
