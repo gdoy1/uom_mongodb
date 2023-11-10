@@ -51,6 +51,20 @@
         <!-- Summary graph of query -->
         <a id="visualSummaryLink" class="btn btn-primary" href="javascript:void(0);" onclick="openGraphPopup()">Query Summary Graph</a>
         <p></p>
+
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="alert alert-danger"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <!--{% for message in messages %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %} -->
+
         <!-- Checkbox to toggle view -->
         <div class="form-check">
             <input class="form-check-input" type="checkbox" id="toggleViewCheckbox">
@@ -59,6 +73,7 @@
             </label>
         </div>
         <!-- Table with toggleable columns -->
+
         <div class="table-responsive">
             <table id="variantsTable" class="table table-bordered">
                 <thead>
@@ -300,7 +315,6 @@
             window.open(url, '_blank', 'width=800,height=600,left=200,top=200');
         }
     </script>
-
     <script>
         (function ($) {
             $.fn.countTo = function (options) {
