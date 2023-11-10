@@ -46,6 +46,9 @@ python manage.py runserver
 ### Query the variants in the database
 To query the variants that are present in the database, use the form present on the *Query Variants* page.
 
+![image](https://github.com/gdoy1/uom_mongodb/assets/30113563/dd7a504e-1966-40e8-857c-ecbfd13372bc)
+
+
 #### View summary of variant consequence from query
 The summary of variant consequences from the query can be view by clicking on the `Query Summary Graph` button.
 ![Alt text](query_search.png)
