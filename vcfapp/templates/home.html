@@ -26,8 +26,16 @@
                 <!-- Search form -->
                 <form method="get" action="{% url 'home' %}">
                     <div class="form-group">
-                        <label for="search_term">Search Term:</label>
-                        <input type="text" id="search_term" name="search" value="{{ request.GET.search }}" class="form-control" placeholder="Enter search term">
+                        <label for="search_term1">Search Term:</label>
+                        <input type="text" id="search_term1" name="search1" value="{{ request.GET.search }}" class="form-control" placeholder="Enter search term">
+                    </div>
+                    <div class="form-group">
+                        <label for="search_term2">Other Search Term:</label>
+                        <input type="text" id="search_term2" name="search2" value="{{ request.GET.search }}" class="form-control" placeholder="Enter search term 2">
+                    </div>
+                    <div class="form-group">
+                        <label for="Chromosome">Chromosome</label>
+                        <input type="text" id="chromosome" name="chromosome" value="{{ request.GET.chromosome }}" class="form-control" placeholder="Enter chromosome, i.e. chr1">
                     </div>
                     <div class="form-group">
                         <label for="start_range">Start Range:</label>
@@ -38,7 +46,7 @@
                         <input type="number" id="end_range" name="end_range" value="{{ request.GET.end_range }}" class="form-control" placeholder="Enter end range">
                     </div>
                     <button type="submit" class="btn btn-primary">Search</button><p></p>
-                    <button type="submit" class="btn btn-primary" name="search_range" value="true">Search Range</button><p></p>
+                    <!-- <button type="submit" class="btn btn-primary" name="search_range" value="true">Search Range</button> --> <p></p>
                 </form>
             </div>
         <div class="table-responsive">

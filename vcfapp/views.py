@@ -18,14 +18,129 @@ def home(request):
     collection = db['variants']
 
     # Get the search term and range from the GET request
-    search_term = request.GET.get('search', '')
+    search_term1 = request.GET.get('search1', '')
+    search_term2 = request.GET.get('search2', '')
+    chromosome = request.GET.get('chromosome', '')
     start_range = request.GET.get('start_range', '')
     end_range = request.GET.get('end_range', '')
 
     # Initialize the query
-    if search_term:
+    if search_term1 and search_term2 and (start_range and end_range and chromosome):
+        regex_query = regex.Regex(search_term1, 'i')  # 'i' for case-insensitive
+        query1 = {
+            '$or': [
+                {'source': regex_query},
+                {'mappings.location': regex_query},
+                {'mappings.assembly_name': regex_query},
+                {'name': regex_query},
+                {'MAF': regex_query},
+                {'ambiguity': regex_query},
+                {'var_class': regex_query},
+                {'synonyms': regex_query},
+                {'evidence': regex_query},
+                {'ancestral_allele': regex_query},
+                {'minor_allele': regex_query},
+                {'most_severe_consequence': regex_query}
+            ]
+        }
+        regex_query2 = regex.Regex(search_term2, 'i')  # 'i' for case-insensitive
+        query2 = {
+            '$or': [
+                {'source': regex_query2},
+                {'mappings.location': regex_query2},
+                {'mappings.assembly_name': regex_query2},
+                {'name': regex_query2},
+                {'MAF': regex_query2},
+                {'ambiguity': regex_query2},
+                {'var_class': regex_query2},
+                {'synonyms': regex_query2},
+                {'evidence': regex_query2},
+                {'ancestral_allele': regex_query2},
+                {'minor_allele': regex_query2},
+                {'most_severe_consequence': regex_query2}
+            ]
+        }
+        query3 = {
+            '$and' : [
+                {'seq_region_name': chromosome},
+                {'mappings.start': {
+                    '$gte': int(start_range),
+                    '$lte': int(end_range)
+                }}]
+        }
+        filtered_variants_cursor = collection.find({'$and': [query1, query2, query3]})
+        #filtered_variants_cursor = collection.find(query)
+    elif search_term1 and search_term2 and (start_range or end_range or chromosome):
+        print("error - missing range")
+    elif start_range and end_range and (search_term1 or search_term2):
         # Construct a regex query that searches all fields
-        regex_query = regex.Regex(search_term, 'i')  # 'i' for case-insensitive
+        if search_term1:
+            regex_query = regex.Regex(search_term1, 'i')  # 'i' for case-insensitive
+        elif search_term2:
+            regex_query = regex.Regex(search_term2, 'i')
+        else:
+            print("ERROR")
+        query1 = {
+            '$or': [
+                {'source': regex_query},
+                {'mappings.location': regex_query},
+                {'mappings.assembly_name': regex_query},
+                {'name': regex_query},
+                {'MAF': regex_query},
+                {'ambiguity': regex_query},
+                {'var_class': regex_query},
+                {'synonyms': regex_query},
+                {'evidence': regex_query},
+                {'ancestral_allele': regex_query},
+                {'minor_allele': regex_query},
+                {'most_severe_consequence': regex_query}
+            ]
+        }
+        # Construct a query that filters by start range
+        query2 = {
+            '$and' : [{'seq_region_name': chromosome},
+            {'mappings.start': {
+                '$gte': int(start_range),
+                '$lte': int(end_range)
+            }}]
+        }
+        #query2 = {
+        #    'mappings.start': {
+        #        '$gte': int(start_range),
+        #        '$lte': int(end_range)
+        #    }
+        #}
+        filtered_variants_cursor = collection.find({'$and': [query1, query2]})
+        #filtered_variants_cursor = collection.find(query)
+    elif start_range and end_range and chromosome:
+        # Construct a query that filters by start range
+        query = {
+            '$and' : [{'seq_region_name': chromosome},
+            {'mappings.start': {
+                '$gte': int(start_range),
+                '$lte': int(end_range)
+            }}]
+        }
+        #query1 = {
+        #    '$and': [
+        #        {'seq_region_name': chromosome}
+        #    ]
+        #}
+        #query2 = {
+        #    'mappings.start': {
+        #        '$gte': int(start_range),
+        #        '$lte': int(end_range)
+        #    }
+        #}
+        filtered_variants_cursor = collection.find(query) # collection.find(query2)
+    elif search_term1 or search_term2:
+        # Construct a regex query that searches all fields
+        if search_term1:
+            regex_query = regex.Regex(search_term1, 'i')  # 'i' for case-insensitive
+        elif search_term2:
+            regex_query = regex.Regex(search_term2, 'i')
+        else:
+            print("ERROR")
         query = {
             '$or': [
                 {'source': regex_query},
@@ -42,19 +157,13 @@ def home(request):
                 {'most_severe_consequence': regex_query}
             ]
         }
-    elif start_range and end_range:
         # Construct a query that filters by start range
-        query = {
-            'mappings.start': {
-                '$gte': int(start_range),
-                '$lte': int(end_range)
-            }
-        }
+        filtered_variants_cursor = collection.find(query)
     else:
         query = {}
+        filtered_variants_cursor = collection.find(query)
 
     # Apply the query and get the count for pagination
-    filtered_variants_cursor = collection.find(query)
     total_items = filtered_variants_cursor.count()
 
     # Pagination settings
