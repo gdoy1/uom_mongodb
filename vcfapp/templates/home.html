@@ -48,6 +48,18 @@
                     <button type="submit" class="btn btn-primary">Search</button><p></p>
                 </form>
             </div>
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="alert alert-danger"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <!--{% for message in messages %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %} -->
         <div class="table-responsive">
             <table id="variantsTable" class="table table-bordered">
                 <thead>
