@@ -45,9 +45,8 @@ python manage.py runserver
 ## Features
 ### Query the variants in the database
 To query the variants that are present in the database, use the form present on the *Query Variants* page.
-
-![image](https://github.com/gdoy1/uom_mongodb/assets/30113563/dd7a504e-1966-40e8-857c-ecbfd13372bc)
-
+#### Example of querying with SNP, variant consequence and coordinate range, variant counter shows a subset of the whole database.
+![image](https://github.com/gdoy1/uom_mongodb/assets/30113563/21496155-d35e-486d-9d67-8227dae424d2)
 
 #### View summary of variant consequence from query
 The summary of variant consequences from the query can be view by clicking on the `Query Summary Graph` button.
