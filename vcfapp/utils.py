@@ -1,6 +1,6 @@
 from pymongo import MongoClient
 import retrying
-import regex
+from bson import ObjectId, regex
 from django.contrib import messages
 
 
@@ -201,9 +201,9 @@ class VcfAppUtils:
         elif search_term1 or search_term2:
             # Construct a regex query that searches all fields
             if search_term1:
-                regex_query = regex.Regex(search_term1, "i")  # 'i' for case-insensitive
+                regex_query = regex.Regex(str(search_term1), "i")  # 'i' for case-insensitive
             elif search_term2:
-                regex_query = regex.Regex(search_term2, "i")
+                regex_query = regex.Regex(str(search_term2), "i")
             else:
                 print("ERROR")
                 message = "ERROR - Search Term failure"
