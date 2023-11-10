@@ -1,12 +1,8 @@
-<<<<<<< HEAD
-{% extends "base.html" %}
-{% load static %}
-{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Visual Summary</title>
+    <title>Query Visual Summary</title>
     <!-- Include Chart.js library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -14,6 +10,7 @@
     <div style="width:50%; height:50%; margin:auto;">
         <canvas id="variantChart"></canvas>
     </div>
+
     <script>
         const ctx = document.getElementById('variantChart').getContext('2d');
         const labels = {{ labels|safe }};
@@ -57,7 +54,5 @@
             },
         });
     </script>
-{% endblock %}
 </body>
-{% endblock %}
 </html>

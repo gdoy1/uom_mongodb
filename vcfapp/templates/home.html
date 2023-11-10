@@ -5,38 +5,110 @@
 <html lang="en">
 
 <body>
-    <div class="container"><p></p>
-        <h1>Variants Table</h1>
-            <div class="search-form">
+    <div class="container">
+        <h1><i class="bi-search"></i> Variants Table</h1>
+        <div class="card bg-light mb-3" style="max-width: 18rem;">
+            <div class="card-header">
+                <h5> Total Variants <img src="{% static '/table.svg' %}" alt="My image">
+                </h5>
+            </div>
+            <div class="card-body">
+                <h2 class="timer count-title count-number" data-to="{{ total_items }}" data-speed="1500"></h2>
+                <p class="card-text"></p>
+            </div>
+        </div>
+
+        <div class="card my-4">
+            <div class="card-header" style="background-color: #f8f9fa;">
+                <strong>Search:</strong>
+            </div>
+            <div class="card-body">
                 <!-- Search form -->
                 <form method="get" action="{% url 'home' %}">
-                    <div class="form-group">
-                        <label for="search_term">Search Term:</label>
-                        <input type="text" id="search_term" name="search" value="{{ request.GET.search }}" class="form-control" placeholder="Enter search term">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="search_term1">Term:</label>
+                            <input type="text" id="search_term1" name="search1" value="{{ request.GET.search1 }}" class="form-control" placeholder="Enter search term">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="search_term2">Additional Term (optional):</label>
+                            <input type="text" id="search_term2" name="search2" value="{{ request.GET.search2 }}" class="form-control" placeholder="Enter search term 2">
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Search</button><p></p>
+                    <div class="card my-3">
+                        <div class="card-header">
+                            <strong>Filter by region:</strong>
+                        </div>
+                        <div class="card-body bg-light">
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label for="Chromosome">Chromosome:</label>
+                                    <input type="text" id="chromosome" name="chromosome" value="{{ request.GET.chromosome }}" class="form-control" placeholder="Enter chromosome, i.e., 1, X, Y">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="start_range">Start Range:</label>
+                                    <input type="number" id="start_range" name="start_range" value="{{ request.GET.start_range }}" class="form-control" placeholder="Enter start range">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="end_range">End Range:</label>
+                                    <input type="number" id="end_range" name="end_range" value="{{ request.GET.end_range }}" class="form-control" placeholder="Enter end range">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col text-center">
+                            <button type="submit" class="btn btn-primary mt-3">Search</button>
+                            <a id="visualSummaryLink" class="btn btn-primary mt-3" href="#" onclick="openGraphPopup()">Query Summary Graph</a>
+                        </div>
+                    </div>
                 </form>
             </div>
-        <div class="table-responsive">
-            <table id="variantsTable" class="table table-bordered">
+        </div>
+
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <p {% if message.tags %} class="alert alert-danger"{% endif %}>{{ message }}</p>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <!-- Results box -->
+        <div class="card mt-4">
+            <div class="card-header" style="background-color: #CBC3E3;">
+                <strong>Results:</strong>
+            </div>
+            <div class="card-body bg-light">
+                <!-- Checkbox to toggle view -->
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="toggleViewCheckbox">
+                    <label class="form-check-label" for="toggleViewCheckbox">
+                        Show Full View
+                    </label>
+                </div>
+
+                <!-- Table with toggleable columns -->
+                <div class="table-responsive">
+                    <table id="variantsTable" class="table table-bordered">
                 <thead>
                     <tr>
                         <th>Source</th>
                         <th>Location</th>
                         <th>Assembly Name</th>
-                        <th>End</th>
-                        <th>Seq Region Name</th>
-                        <th>Strand</th>
+                        <th class="toggle-column">End</th>
+                        <th class="toggle-column">Chromosome</th>
+                        <th class="toggle-column">Strand</th>
                         <th>Allele String</th>
-                        <th>Start</th>
+                        <th class="toggle-column">Start</th>
                         <th>Name</th>
                         <th>MAF</th>
-                        <th>Ambiguity</th>
+                        <th class="toggle-column">Ambiguity</th>
                         <th>Var Class</th>
                         <th>Synonyms</th>
                         <th>Evidence</th>
-                        <th>Ancestral Allele</th>
-                        <th>Minor Allele</th>
+                        <th class="toggle-column">Ancestral Allele</th>
+                        <th class="toggle-column">Minor Allele</th>
                         <th>Most Severe Consequence</th>
                         <th>Actions</th>
                     </tr>
@@ -75,11 +147,24 @@
                                     {% csrf_token %}
                                     <input type="submit" value="Delete" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this record?');">
                                 </form>
+                                {% if variant.most_severe_consequence == 'missense_variant' %}
+                                <p></p>
+                                <button class="btn btn-primary btn-sm alpha-missense-button"
+                                data-chrom="{{ variant.mappings.0.seq_region_name }}"
+                                data-pos="{{ variant.mappings.0.start }}"
+                                data-ref="{{ variant.mappings.0.allele_string|slice:":1" }}"
+                                data-alt="{{ variant.mappings.0.allele_string|slice:"2:" }}"
+                                onclick="alphaMissense('{{ variant.mappings.0.seq_region_name }}', '{{ variant.mappings.0.start }}', '{{ variant.mappings.0.allele_string|slice:":1" }}', '{{ variant.mappings.0.allele_string|slice:"2:" }}')">
+                                    AlphaMissense
+                                </button>
+                                {% endif %}
                             </center>
                         </td>
                     </tr>
                     {% endfor %}
             </table>
+            <!-- AlphaMissense result placeholder -->
+            <div id="alpha-missense-result"></div>
         </div>
         <!-- Pagination controls -->
         <nav aria-label="Page navigation">
@@ -119,7 +204,12 @@
                 {% endif %}
             </ul>
         </nav>
+        <p></p>
+        <div id="bottom">
+            <a class="btn btn-primary" href="#top">Back to top</a>
+        </div>
     </div>
+
 
 
 
@@ -128,38 +218,53 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 
     <!-- Load DataTables -->
-    <script type="text/javascript" charset="utf8" 
+    <script type="text/javascript" charset="utf8"
             src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 
-    <!-- Your script to initialize DataTables -->
+    <!-- Initialize DataTables and Toggle Columns Script -->
     <script>
-    $(document).ready(function () {
-        $('#variantsTable').DataTable({
-            "pagingType": "simple_numbers",
-            "ordering": true,
-            "columnDefs": [ {
-                "targets": 0,
-                "render": DataTable.render.ellipsis( 17, true )
-              } ],
+        $(document).ready(function () {
+            // Initialize DataTables and assign the instance to a variable
+            var table = $('#variantsTable').DataTable({
+                "pagingType": "simple_numbers",
+                "ordering": true,
+                "columnDefs": [
+                    {
+                        // Specify the target columns to be hidden
+                        // Adjust these indexes to match the actual order of your table columns
+                        "targets": [3, 4, 5, 7, 10, 14, 15],
+                        "visible": false
+                    }
+                ],
             "scrollCollapse": false,
             "scrollY": '50vh',
             "scrollX": true,
             "info": false,
             "searching": false,
             "order": [[0, "asc"]],
-            "responsive": true,
+            "responsive": true
         });
+
+        // Checkbox event to toggle the view
+        $('#toggleViewCheckbox').change(function () {
+            // Use a column class identifier if your columns have a specific class
+            var columnsToToggle = table.columns('.toggle-column');
+            // Toggle the visibility based on the checkbox
+            columnsToToggle.visible(this.checked);
+        });
+
+        // Initially uncheck the checkbox on page load
+        $('#toggleViewCheckbox').prop('checked', false);
     });
     </script>
-
     <script>
         function getClassification(variantName, button) {
             // Find the loading GIF image next to the button and show it
             const loadingGif = $(button).siblings('.loading-gif');
             loadingGif.show();
 
-            // Disable the button
-            button.disabled = true;
+            // Hide the Classify button
+            $(button).hide();
 
             const url = `https://rest.ensembl.org/vep/human/id/${variantName}?content-type=application/json`;
 
@@ -175,12 +280,162 @@
                     alert('Error retrieving classification: ' + error.statusText);
                 },
                 complete: function() {
-                    // Hide the loading GIF and enable the button again
+                    // Hide the loading GIF and show the Classify button again
                     loadingGif.hide();
-                    button.disabled = false;
+                    $(button).show();
                 }
             });
         }
+    </script>
+    <!-- pop out window show visual summary of query results -->
+    <script>
+        function openGraphPopup() {
+            // Get the values from the text boxes
+            var search1 = document.getElementById('search_term1').value;
+            var search2 = document.getElementById('search_term2').value;
+            var chr = document.getElementById('chromosome').value;
+            var startValue = document.getElementById('start_range').value;
+            var endValue = document.getElementById('end_range').value;
+
+            if (search1.trim() === '') {
+                var search1 = "None"
+            }
+            if (search2.trim() === '') {
+                var search2 = "None"
+            }
+            if (chr.trim() === '') {
+                var chr = "None"
+            }
+            if (startValue.trim() === '') {
+                var startValue = "None"
+            }
+            if (endValue.trim() === '') {
+                var endValue = "None"
+            }
+
+            // Check if startValue and endValue are empty
+            if (search1.trim() === 'None' && search2.trim() === 'None' && chr.trim() === 'None' && startValue.trim() === 'None' && endValue.trim() === 'None') {
+                // Go to main summary page if all search fields are blank
+                var url = 'visual-summary/';
+                window.location.href = url;
+            } else {
+                // Build the URL with the dynamic start and end values
+                var url = 'visual-summary-query/' + search1 + '/' + search2 + '/' + chr + '/' + startValue + '/' + endValue + '/';
+
+                // Open the popup window with the dynamic URL
+                window.open(url, 'Query Visual Summary', 'width=1200,height=800');
+            }
+        }
+    </script>
+
+    <script>
+        function alphaMissense(chrom, pos, ref, alt) {
+            // Construct the URL
+            const url = `https://amdb.co.uk/api/v1/variant?chrom=chr${chrom}&pos=${pos}&ref_allele=${ref}&alt_allele=${alt}&genome=hg38`;
+
+            // Open a new popup window with specified width and height
+            window.open(url, '_blank', 'width=800,height=600,left=200,top=200');
+        }
+    </script>
+    <script>
+        (function ($) {
+            $.fn.countTo = function (options) {
+                options = options || {};
+
+                return $(this).each(function () {
+                    // set options for current element
+                    var settings = $.extend({}, $.fn.countTo.defaults, {
+                        from:            $(this).data('from'),
+                        to:              $(this).data('to'),
+                        speed:           $(this).data('speed'),
+                        refreshInterval: $(this).data('refresh-interval'),
+                        decimals:        $(this).data('decimals')
+                    }, options);
+
+                    // how many times to update the value, and how much to increment the value on each update
+                    var loops = Math.ceil(settings.speed / settings.refreshInterval),
+                        increment = (settings.to - settings.from) / loops;
+
+                    // references & variables that will change with each update
+                    var self = this,
+                        $self = $(this),
+                        loopCount = 0,
+                        value = settings.from,
+                        data = $self.data('countTo') || {};
+
+                    $self.data('countTo', data);
+
+                    // if an existing interval can be found, clear it first
+                    if (data.interval) {
+                        clearInterval(data.interval);
+                    }
+                    data.interval = setInterval(updateTimer, settings.refreshInterval);
+
+                    // initialize the element with the starting value
+                    render(value);
+
+                    function updateTimer() {
+                        value += increment;
+                        loopCount++;
+
+                        render(value);
+
+                        if (typeof(settings.onUpdate) == 'function') {
+                            settings.onUpdate.call(self, value);
+                        }
+
+                        if (loopCount >= loops) {
+                            // remove the interval
+                            $self.removeData('countTo');
+                            clearInterval(data.interval);
+                            value = settings.to;
+
+                            if (typeof(settings.onComplete) == 'function') {
+                                settings.onComplete.call(self, value);
+                            }
+                        }
+                    }
+
+                    function render(value) {
+                        var formattedValue = settings.formatter.call(self, value, settings);
+                        $self.html(formattedValue);
+                    }
+                });
+            };
+
+            $.fn.countTo.defaults = {
+                from: 0,               // the number the element should start at
+                to: 0,                 // the number the element should end at
+                speed: 1000,           // how long it should take to count between the target numbers
+                refreshInterval: 100,  // how often the element should be updated
+                decimals: 0,           // the number of decimal places to show
+                formatter: formatter,  // handler for formatting the value before rendering
+                onUpdate: null,        // callback method for every time the element is updated
+                onComplete: null       // callback method for when the element finishes updating
+            };
+
+            function formatter(value, settings) {
+                return value.toFixed(settings.decimals);
+            }
+        }(jQuery));
+
+        jQuery(function ($) {
+          // custom formatting example
+          $('.count-number').data('countToOptions', {
+            formatter: function (value, options) {
+              return value.toFixed(options.decimals).replace(/\B(?=(?:\d{3})+(?!\d))/g, ',');
+            }
+          });
+
+          // start all the timers
+          $('.timer').each(count);
+
+          function count(options) {
+            var $this = $(this);
+            options = $.extend({}, options || {}, $this.data('countToOptions') || {});
+            $this.countTo(options);
+          }
+        });
     </script>
 {% endblock %}
 </body>
