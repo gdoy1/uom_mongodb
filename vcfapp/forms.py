@@ -273,9 +273,9 @@ class SingleVariantForm(forms.Form):
         if not most_severe_consequence:
             self.cleaned_data['most_severe_consequence'] = None
         if not synonyms:
-            self.cleaned_data['synonyms'] = []
+            self.cleaned_data['synonyms'] = None
         if not evidence:
-            self.cleaned_data['evidence'] = []
+            self.cleaned_data['evidence'] = None
 
         is_unique = helper.check_single_variant_unique(
             assembly, chromosome, start, end,
@@ -303,7 +303,7 @@ class UploadForm(forms.Form):
                     if upload_correct:
                         is_unique = helper.is_var_unique(json_data['name'])
                         if is_unique != True:
-                            raise ValidationError(is_unique) 
+                            raise ValidationError(is_unique)
                     else:
                         raise ValidationError(upload_correct)
                 except JSONDecodeError:

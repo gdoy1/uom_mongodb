@@ -222,9 +222,9 @@ def add_individual_data_view(request):
                 }],
                 "ancestral_allele": form.cleaned_data['ancestral_allele'],
                 "minor_allele": form.cleaned_data['minor_allele'],
-                "synonyms": [form.cleaned_data['synonyms']],
+                "synonyms": form.cleaned_data['synonyms'],
                 "most_severe_consequence": form.cleaned_data['most_severe_consequence'],
-                "evidence": [form.cleaned_data['evidence']]
+                "evidence": form.cleaned_data['evidence']
             }
 
             inserted = collection.insert_one(
