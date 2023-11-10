@@ -8,12 +8,13 @@ class VcfAppUtils:
     def __init__(self):
         self.MISSING_FIELDS = """
             Required fields missing from JSON file.
-            'name'
             'mappings' {
                 'assembly_name',
                 'seq_region_name',
                 'start',
-                'end'
+                'end',
+                'ancestral_allele',
+                'minor_allele'
             }
         """
 
