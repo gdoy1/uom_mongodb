@@ -46,6 +46,13 @@ python manage.py runserver
 ### Query the variants in the database
 To query the variants that are present in the database, use the form present on the *Query Variants* page.
 
+#### View summary of variant consequence from query
+The summary of variant consequences from the query can be view by clicking on the `Query Summary Graph` button.
+![Alt text](query_search.png)
+
+Example of query results summary graph of variant consequences. \
+![Alt text](query_summary_graph.png)
+
 ### Add variants to the database
 
 #### Add a single variant
@@ -53,8 +60,18 @@ A single variant can be added via a form using the *'Add Single Variant'* page f
 * The form will validate your entries and check if your variant already exists in the database by the genome assembly, chromosome, start, end, ancestral and minor alleles provided.
 * If the variant already exists, the form will produce an error, otherwise your variant will be uploaded and a success message will be displayed.
 ![alt text](add_individual_variant.png)
+
 #### Bulk upload variants
-Variants can be uploaded in bulk via a JSON file using the *Bulk Upload* page. This form will also check if any variants in the JSON are present in the database and produce errors if they do while uploading any which do not already exist.
+Variants can be uploaded in bulk via a JSON file using the *Upload* page.
+![Upload page](bulk_upload.png)
+
+A success message will confirm everything has been uploaded correctly. \
+![Upload success](upload_success.png)
+
+This form will check if any variants in the JSON are already present in the database, have any missing mandatory field or do not conform to the correct format.
+![Upload fail existing variant](upload_fail_duplicate.png)
+![Upload fail missing mandatory field](upload_fail_missing.png)
+![Upload fail incorrect format](upload_fail_format.png)
 
 
 [python-image]: https://img.shields.io/badge/Made%20with-Python-green.svg
