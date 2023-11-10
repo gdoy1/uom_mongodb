@@ -62,14 +62,13 @@ def home(request):
         }
         query3 = {
             '$and' : [
-                {'seq_region_name': chromosome},
+                {'mappings.seq_region_name': chromosome},
                 {'mappings.start': {
                     '$gte': int(start_range),
                     '$lte': int(end_range)
                 }}]
         }
         filtered_variants_cursor = collection.find({'$and': [query1, query2, query3]})
-        #filtered_variants_cursor = collection.find(query)
     elif search_term1 and search_term2 and (start_range or end_range or chromosome):
         print("error - missing range")
     elif start_range and end_range and (search_term1 or search_term2):
@@ -98,40 +97,23 @@ def home(request):
         }
         # Construct a query that filters by start range
         query2 = {
-            '$and' : [{'seq_region_name': chromosome},
+            '$and' : [{'mappings.seq_region_name': chromosome},
             {'mappings.start': {
                 '$gte': int(start_range),
                 '$lte': int(end_range)
             }}]
         }
-        #query2 = {
-        #    'mappings.start': {
-        #        '$gte': int(start_range),
-        #        '$lte': int(end_range)
-        #    }
-        #}
         filtered_variants_cursor = collection.find({'$and': [query1, query2]})
         #filtered_variants_cursor = collection.find(query)
     elif start_range and end_range and chromosome:
         # Construct a query that filters by start range
         query = {
-            '$and' : [{'seq_region_name': chromosome},
+            '$and' : [{'mappings.seq_region_name': chromosome},
             {'mappings.start': {
                 '$gte': int(start_range),
                 '$lte': int(end_range)
             }}]
         }
-        #query1 = {
-        #    '$and': [
-        #        {'seq_region_name': chromosome}
-        #    ]
-        #}
-        #query2 = {
-        #    'mappings.start': {
-        #        '$gte': int(start_range),
-        #        '$lte': int(end_range)
-        #    }
-        #}
         filtered_variants_cursor = collection.find(query) # collection.find(query2)
     elif search_term1 or search_term2:
         # Construct a regex query that searches all fields
