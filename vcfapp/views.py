@@ -1,3 +1,6 @@
+
+from django.core.paginator import Paginator
+from django.core.exceptions import ValidationError
 from django.contrib import messages
 from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
@@ -69,6 +72,8 @@ def home(request):
         filtered_variants_cursor = collection.find({'$and': [query1, query2, query3]})
     elif search_term1 and search_term2 and (start_range or end_range or chromosome):
         print("error - missing range")
+        message = "ERROR - Chromosome and range not formatted correctly"
+        messages.error(request, message)
     elif start_range and end_range and (search_term1 or search_term2):
         # Construct a regex query that searches all fields
         if search_term1:
@@ -77,6 +82,8 @@ def home(request):
             regex_query = regex.Regex(search_term2, 'i')
         else:
             print("ERROR")
+            message = "ERROR - Search Term failure"
+            messages.error(request, message)
         query1 = {
             '$or': [
                 {'source': regex_query},
@@ -121,6 +128,8 @@ def home(request):
             regex_query = regex.Regex(search_term2, 'i')
         else:
             print("ERROR")
+            message = "ERROR - Search Term failure"
+            messages.error(request, message)
         query = {
             '$or': [
                 {'source': regex_query},
@@ -139,9 +148,12 @@ def home(request):
         }
         # Construct a query that filters by start range
         filtered_variants_cursor = collection.find(query)
+    elif chromosome or start_range or end_range:
+        message = "ERROR - Requires chromosome and range to search"
+        filtered_variants_cursor = collection.find()
+        messages.error(request, message)
     else:
-        query = {}
-        filtered_variants_cursor = collection.find(query)
+        filtered_variants_cursor = collection.find()
 
     # Apply the query and get the count for pagination
     total_items = filtered_variants_cursor.count()
