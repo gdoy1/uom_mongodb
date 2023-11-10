@@ -51,10 +51,10 @@ To query the variants that are present in the database, use the form present on 
 
 #### View summary of variant consequence from query
 The summary of variant consequences from the query can be view by clicking on the `Query Summary Graph` button.
-![Alt text](query_search.png)
+![Alt text](images/query_search.png)
 
 Example of query results summary graph of variant consequences. \
-![Alt text](query_summary_graph.png)
+![Alt text](images/query_summary_graph.png)
 
 ### Add variants to the database
 
@@ -62,19 +62,19 @@ Example of query results summary graph of variant consequences. \
 A single variant can be added via a form using the *'Add Single Variant'* page from the navigation bar.
 * The form will validate your entries and check if your variant already exists in the database by the genome assembly, chromosome, start, end, ancestral and minor alleles provided.
 * If the variant already exists, the form will produce an error, otherwise your variant will be uploaded and a success message will be displayed.
-![alt text](add_individual_variant.png)
+![alt text](images/add_individual_variant.png)
 
 #### Bulk upload variants
 Variants can be uploaded in bulk via a JSON file using the *Upload* page.
-![Upload page](bulk_upload.png)
+![Upload page](images/bulk_upload.png)
 
 A success message will confirm everything has been uploaded correctly. \
-![Upload success](upload_success.png)
+![Upload success](images/upload_success.png)
 
 This form will check if any variants in the JSON are already present in the database, have any missing mandatory field or do not conform to the correct format.
-![Upload fail existing variant](upload_fail_duplicate.png)
-![Upload fail missing mandatory field](upload_fail_missing.png)
-![Upload fail incorrect format](upload_fail_format.png)
+![Upload fail existing variant](images/upload_fail_duplicate.png)
+![Upload fail missing mandatory field](images/upload_fail_missing.png)
+![Upload fail incorrect format](images/upload_fail_format.png)
 
 
 [python-image]: https://img.shields.io/badge/Made%20with-Python-green.svg
