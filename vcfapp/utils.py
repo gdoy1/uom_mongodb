@@ -63,17 +63,24 @@ class VcfAppUtils:
 
         return True
 
-    def is_var_unique(self, name):
-        # Connect to the MongoDB database
+    def is_var_unique(self, assembly, chromosome, start, end, ancestral_allele, minor_allele):
         db = self.connect_to_database()
         collection = db["variants"]
 
-        results = [r for r in collection.find({"name": name})]
+        results = collection.find_one({
+            "$and": [
+                {"mappings.assembly_name": assembly},
+                {"mappings.start": start},
+                {"mappings.end": end},
+                {"mappings.seq_region_name": chromosome},
+                {"ancestral_allele": ancestral_allele},
+                {"minor_allele": minor_allele}
+            ]
+        })
 
-        if len(results) > 0:
-            error_msg = f"Variant already exists...\n{results[0]}"
+        if results:
+            error_msg = f"Variant already exists...\n{results}"
             return error_msg
-
         return True
 
     def check_single_variant_unique(

@@ -1,6 +1,7 @@
 from django.core.paginator import Paginator
 from django.core.exceptions import ValidationError
 from django.contrib import messages
+from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 from bson import ObjectId, regex
@@ -8,6 +9,7 @@ from django.shortcuts import render
 import json
 from .forms import SingleVariantForm, UploadForm
 from .utils import VcfAppUtils
+
 
 helper = VcfAppUtils()
 
@@ -233,8 +235,55 @@ def upload(request):
                 if line.strip():
                     json_data = json.loads(line)
                     collection.insert_one(json_data)
-                    form = UploadForm()
+            form = UploadForm()
+            messages.success(request, 'Upload successful')
+        else:
+            messages.error(request, 'Upload failed')
+            form = UploadForm()
     else:
         form = UploadForm()
 
-    return render(request, "upload.html", {"form": form})
+    return render(request, 'upload.html', {'form': form})
+
+def visual_summary_query(request, search1, search2, chr, start_range, end_range):
+    # Connect to the MongoDB database
+    db = helper.connect_to_database()
+    collection = db['variants']
+
+    if search1 == 'None': search1 = ''
+    if search2 == 'None': search2 = ''
+    if chr == 'None': chr = ''
+    if start_range == 'None': start_range = ''
+    if end_range == 'None': end_range = ''
+
+    # call search query function
+    results = helper.querying_logic(
+        search_term1=search1,
+        search_term2=search2,
+        chromosome=chr,
+        start_range=start_range,
+        end_range=end_range
+    )
+
+    # Create a dictionary of consequence and their frequencies
+    consequence_counts = {}
+    for result in results:
+        consequence = result['most_severe_consequence']
+        if consequence not in consequence_counts:
+            consequence_counts[consequence] = 1
+        elif consequence in consequence_counts:
+            consequence_counts[consequence] += 1
+
+    # Create data lists for pie chart
+    labels = []
+    counts = []
+    for label, count in consequence_counts.items():
+        labels.append(label)
+        counts.append(count)
+
+    context = {
+        'labels': labels,
+        'counts': counts,
+    }
+
+    return render(request, 'visual_summary_query.html', context)

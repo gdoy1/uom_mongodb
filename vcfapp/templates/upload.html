@@ -8,21 +8,39 @@
         <div class="col-8">
             <h2 class="mt-2"><i class="bi-file-earmark-arrow-up"></i>Bulk Upload</h2>
             <hr class="mt-0 mb-4">
-            <hr>
             <p><i>Upload variants.json file</i></p>
             <p><u>Format</u></p>
-            <p>Single line per record e.g.</p>
-            <p>{"source":"User
-                upload","mappings":[{"location":"1:1234-5678","assembly_name":"GRCh38","end":5678,"seq_region_name":"1","strand":1,"coord_system":"chromosome","allele_string":"G/A","start":1234}],"name":"rs536822784","MAF":"0.000199681","ambiguity":"R","var_class":"SNP","synonyms":["NM_007313.2:c.137-23972G>A"],"evidence":["Frequency","1000Genomes"],"ancestral_allele":"G","minor_allele":"A","most_severe_consequence":"intron_variant"}
-            </p>
+            <p>Single line per record.</p>
+            <p>Madatory fields include: {"mappings": [{"seq_region_name": "chromosome", "start": 1, "end": 10}], "name": "rs1234"}</p>
+            <p>Example:</p>
+            <code>{ <br>
+                "source":"User upload", <br>
+                "mappings":[{"location":"1:1234-5678","assembly_name":"GRCh38","end":5678,"seq_region_name":"1","strand":1,"coord_system":"chromosome","allele_string":"G/A","start":1234}], <br>
+                "name":"rs536822784", <br>
+                "MAF":"0.000199681", <br>
+                "ambiguity":"R", <br>
+                "var_class":"SNP", <br>
+                "synonyms":["NM_007313.2:c.137-23972G>A"], <br>
+                "evidence":["Frequency","1000Genomes"], <br>
+                "ancestral_allele":"G", <br>
+                "minor_allele":"A", <br>
+                "most_severe_consequence":"intron_variant" <br>
+            }
+            </code>
             <hr>
             <br>
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                {{form}}
+                {{form|crispy}}
                 <button type="submit" class="btn btn-success">Upload</button>
                 <button type="reset" class="btn btn-secondary">Reset</button>
             </form>
+            <p></p>
+            {% if messages %}
+                {% for message in messages %}
+                    <h2>{{message}}</h2>
+                {% endfor %}
+            {% endif %}
         </div>
     </div>
     <hr>

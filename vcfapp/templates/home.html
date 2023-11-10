@@ -7,7 +7,6 @@
 <body>
     <div class="container"><p></p>
         <h1><i class="bi-search"></i> Variants Table</h1>
-        <h1>Variants Table</h1>
         <div>
             <div class="card bg-light mb-3" style="max-width: 18rem;">
                 <div class="card-header">
@@ -27,16 +26,16 @@
                 <!-- Search form -->
                 <form method="get" action="{% url 'home' %}">
                     <div class="form-group">
-                        <label for="search_term1">Search Term:</label>
+                        <label for="search_term1">Search Term 1:</label>
                         <input type="text" id="search_term1" name="search1" value="{{ request.GET.search1 }}" class="form-control" placeholder="Enter search term">
                     </div>
                     <div class="form-group">
-                        <label for="search_term2">Other Search Term:</label>
+                        <label for="search_term2">Search Term 2:</label>
                         <input type="text" id="search_term2" name="search2" value="{{ request.GET.search2 }}" class="form-control" placeholder="Enter search term 2">
                     </div>
                     <div class="form-group">
                         <label for="Chromosome">Chromosome</label>
-                        <input type="text" id="chromosome" name="chromosome" value="{{ request.GET.chromosome }}" class="form-control" placeholder="Enter chromosome, i.e. chr1">
+                        <input type="text" id="chromosome" name="chromosome" value="{{ request.GET.chromosome }}" class="form-control" placeholder="Enter chromosome, i.e. 1">
                     </div>
                     <div class="form-group">
                         <label for="start_range">Start Range:</label>
@@ -49,6 +48,9 @@
                     <button type="submit" class="btn btn-primary">Search</button><p></p>
                 </form>
             </div>
+        <!-- Summary graph of query -->
+        <a id="visualSummaryLink" class="btn btn-primary" href="javascript:void(0);" onclick="openGraphPopup()">Query Summary Graph</a>
+        <p></p>
 
         {% if messages %}
         <ul class="messages">
@@ -182,7 +184,12 @@
                 {% endif %}
             </ul>
         </nav>
+        <p></p>
+        <div id="bottom">
+            <a class="btn btn-primary" href="#top">Back to top</a>
+        </div>
     </div>
+
 
 
 
@@ -191,7 +198,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 
     <!-- Load DataTables -->
-    <script type="text/javascript" charset="utf8" 
+    <script type="text/javascript" charset="utf8"
             src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 
     <!-- Initialize DataTables and Toggle Columns Script -->
@@ -260,6 +267,47 @@
             });
         }
     </script>
+    <!-- pop out window show visual summary of query results -->
+    <script>
+        function openGraphPopup() {
+            // Get the values from the text boxes
+            var search1 = document.getElementById('search_term1').value;
+            var search2 = document.getElementById('search_term2').value;
+            var chr = document.getElementById('chromosome').value;
+            var startValue = document.getElementById('start_range').value;
+            var endValue = document.getElementById('end_range').value;
+
+            if (search1.trim() === '') {
+                var search1 = "None"
+            }
+            if (search2.trim() === '') {
+                var search2 = "None"
+            }
+            if (chr.trim() === '') {
+                var chr = "None"
+            }
+            if (startValue.trim() === '') {
+                var startValue = "None"
+            }
+            if (endValue.trim() === '') {
+                var endValue = "None"
+            }
+
+            // Check if startValue and endValue are empty
+            if (search1.trim() === '' && search2.trim() === '' && chr.trim() === '' && startValue.trim() === '' && endValue.trim() === '') {
+                // Go to main summary page if all search fields are blank
+                var url = 'visual-summary/';
+                window.location.href = url;
+            } else {
+                // Build the URL with the dynamic start and end values
+                var url = 'visual-summary-query/' + search1 + '/' + search2 + '/' + chr + '/' + startValue + '/' + endValue + '/';
+
+                // Open the popup window with the dynamic URL
+                window.open(url, 'Query Visual Summary', 'width=1200,height=800');
+            }
+        }
+    </script>
+
     <script>
         function alphaMissense(chrom, pos, ref, alt) {
             // Construct the URL

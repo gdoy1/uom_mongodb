@@ -1,0 +1,22 @@
+{
+    "source":"User upload",
+    "mappings":[{
+        "location":"99:99-99",
+        "assembly_name":"GRCh38",
+        "end":99,
+        "seq_region_name":"9",
+        "strand":1,
+        "coord_system":"chromosome",
+        "allele_string":"G/A",
+        "start":99
+    }],
+    "name":"rs536822784",
+    "MAF":"0.000199681",
+    "ambiguity":"R",
+    "var_class":"SNP",
+    "synonyms":["NM_007313.2:c.137-23972G>A"],
+    "evidence":["Frequency","1000Genomes"],
+    "ancestral_allele":"G",
+    "minor_allele":"A",
+    "most_severe_consequence":"intron_variant"
+}
