@@ -1,13 +1,12 @@
+
 from django.core.paginator import Paginator
 from django.core.exceptions import ValidationError
 from django.contrib import messages
 from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
-from pymongo import MongoClient
 from bson import ObjectId, regex
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 import json
-from json.decoder import JSONDecodeError
 from .forms import SingleVariantForm, UploadForm
 from .utils import VcfAppUtils
 
@@ -269,9 +268,13 @@ def visual_summary(request):
 
     # Aggregate the counts for each type of most_severe_consequence
     pipeline = [
+        {"$match": {"most_severe_consequence": {"$ne": None}}},  # Exclude documents where most_severe_consequence is None
         {"$group": {"_id": "$most_severe_consequence", "count": {"$sum": 1}}}
     ]
     consequences = list(collection.aggregate(pipeline))
+
+    # Exclude entries where '_id' is None
+    consequences = [c for c in consequences if c['_id'] is not None]
 
     # Convert the aggregation result into a format suitable for the charting library
     labels = [consequence['_id'] for consequence in consequences]
@@ -284,15 +287,12 @@ def visual_summary(request):
 
     return render(request, 'visual_summary.html', context)
 
-
-
 def add_individual_data_view(request):
     # Connect to the MongoDB database
     db = helper.connect_to_database()
     collection = db['variants']
 
-    context = {}
-    context['form'] = SingleVariantForm()
+    form = SingleVariantForm()
     if request.POST:
         form = SingleVariantForm(request.POST)
         if form.is_valid():
@@ -301,15 +301,11 @@ def add_individual_data_view(request):
                 f"{form.cleaned_data['start']}-"
                 f"{form.cleaned_data['end']}"
             )
-            ancestral_allele = form.cleaned_data['ancestral_allele']
-            minor_allele = form.cleaned_data['minor_allele']
-            if ancestral_allele or minor_allele:
-                allele_string = (
-                    f"{form.cleaned_data['ancestral_allele']}/"
-                    f"{form.cleaned_data['minor_allele']}"
-                )
-            else:
-                allele_string = None
+            ancestral_allele = form.cleaned_data['ancestral_allele'].upper()
+            minor_allele = form.cleaned_data['minor_allele'].upper()
+            allele_string = (
+                f"{ancestral_allele}/{minor_allele}"
+            )
 
             json_to_insert = {
                 "source": "Manual single variant upload",
@@ -334,17 +330,21 @@ def add_individual_data_view(request):
                 "evidence": form.cleaned_data['evidence']
             }
 
-            print(json_to_insert)
-
-            collection.insert_one(
+            inserted = collection.insert_one(
                 json_to_insert
+            )
+            doc_id = inserted.inserted_id
+            messages.success(
+                request,
+                f'Variant submitted successfully! Inserted object ID: {doc_id}'
             )
             form = SingleVariantForm()
             return HttpResponseRedirect(reverse('add-individual-var'))
     else:
         form = SingleVariantForm()
 
-    return render(request, "single_variant.html", context)
+    return render(request, "single_variant.html", {'form': form})
+
 
 def upload(request):
     # Connect to the MongoDB database

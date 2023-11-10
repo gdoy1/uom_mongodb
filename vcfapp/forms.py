@@ -50,11 +50,33 @@ class SingleVariantForm(forms.Form):
         min_value=0
     )
 
+    ancestral_allele = forms.CharField(
+        label='Ancestral allele',
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Only A, C, T, G or N characters allowed",
+                'pattern':'[ACTGN]+'
+            }
+        )
+    )
+
+    minor_allele = forms.CharField(
+        label='Minor allele',
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Only A, C, T, G or N characters allowed",
+                'pattern':'[ACTGN]+'
+            }
+        )
+    )
+
     strand = forms.ChoiceField(
         required=False,
         label='Strand',
         choices=[
-            (None, '--- Select strand'),
+            (None, '--- Select strand ---'),
             ("1", "1"),
             ("-1", "-1")
         ]
@@ -64,7 +86,12 @@ class SingleVariantForm(forms.Form):
         label='Minor Allele Frequency',
         required=False,
         min_value=0.0,
-        max_value=1.0
+        max_value=1.0,
+        widget=forms.NumberInput(
+            attrs={
+                "placeholder": "E.g. 0.00345"
+            }
+        )
     )
 
     ambiguity = forms.ChoiceField(
@@ -93,7 +120,35 @@ class SingleVariantForm(forms.Form):
             ('sequence_alteration', 'sequence alteration'),
             ('somatic_SNV', 'somatic SNV'),
             ('somatic_deletion', 'somatic deletion'),
-            ('subsitution', 'substitution'), ('tandem_repeat', 'tandem repeat')
+            ('subsitution', 'substitution'),
+            ('tandem_repeat', 'tandem repeat'),
+            ('probe', 'probe'), ('translocation', 'translocation'),
+            ('tandem_duplication', 'tandem duplication'),
+            ('short_tandem_repeat_variation', 'short tandem repeat variation'),
+            ('novel_sequence_insertion', 'novel sequence insertion'),
+            ('mobile_element_insertion', 'mobile element insertion'),
+            ('mobile_element_deletion', 'mobile element deletion'),
+            ('loss_of_heterozygosity', 'loss of heterozygosity'),
+            ('inversion', 'inversion'),
+            ('intrachromosomal_translocation', 'intrachromosomal translocation'),
+            ('intrachromosomal_breakpoint', 'intrachromosomal breakpoint'),
+            ('interchromosomal_translocation', 'interchromosomal translocation'),
+            ('interchromosomal_breakpoint', 'interchromosomal breakpoint'),
+            ('duplication', 'duplication'),
+            ('copy_number_variation', 'copy number variation'),
+            ('copy_number_loss', 'copy number loss'),
+            ('copy_number_gain', 'copy number gain'),
+            ('complex_substitution', 'complex substitution'),
+            ('complex_structural_alteration', 'complex structural alteration'),
+            ('complex_chromosomal_rearrangement', 'complex chromosomal rearrangement'),
+            ('SVA_insertion', 'SVA insertion'),
+            ('SVA_deletion', 'SVA deletion'),
+            ('LINE1_insertion', 'LINE1 insertion'),
+            ('LINE1_deletion', 'LINE1 deletion'),
+            ('HERV_insertion', 'HERV insertion'),
+            ('HERV_deletion', 'HERV deletion'),
+            ('Alu_insertion', 'Alu insertion'),
+            ('Alu_deletion', 'Alu deletion')
         ]
     )
 
@@ -102,30 +157,8 @@ class SingleVariantForm(forms.Form):
         required=False,
                 widget=forms.TextInput(
             attrs={
-                "placeholder": "rs...",
+                "placeholder": "rs1234...",
                 "pattern": "(rs[0-9]+)"
-            }
-        )
-    )
-
-    ancestral_allele = forms.CharField(
-        label='Ancestral allele',
-        required=False,
-        widget=forms.TextInput(
-            attrs={
-                "placeholder": "e.g. 'A'",
-                'pattern':'[ACTGN]+'
-            }
-        )
-    )
-
-    minor_allele = forms.CharField(
-        label='Minor allele',
-        required=False,
-        widget=forms.TextInput(
-            attrs={
-                "placeholder": "e.g. 'G'",
-                'pattern':'[ACTGN]+'
             }
         )
     )
@@ -154,18 +187,49 @@ class SingleVariantForm(forms.Form):
             ('stop_lost', 'stop lost'),
             ('stop_retained_variant', 'stop retained variant'),
             ('synonymous_variant', 'synonymous variant'),
-            ('upstream_gene_variant', 'upstream gene variant')
+            ('upstream_gene_variant', 'upstream gene variant'),
+            ('transcript_ablation', 'transcript ablation'),
+            ('transcript_amplification', 'transcript_amplification'),
+            ('feature_elongation', 'feature elongation'),
+            ('feature_truncation', 'feature truncation'),
+            ('inframe_insertion', 'inframe insertion'),
+            ('splice_donor_5th_base_variant', 'splice donor 5th base variant'),
+            ('splice_donor_region_variant', 'splice donor region variant'),
+            ('splice_polypyrimidine_tract_variant', 'splice polypyrimidine tract variant'),
+            ('incomplete_terminal_codon_variant', 'incomplete terminal codon variant'),
+            ('start_retained_variant', 'start retained variant'),
+            ('NMD_transcript_variant', 'NMD transcript variant'),
+            ('non_coding_transcript_variant', 'non coding transcript variant'),
+            ('coding_transcript_variant', 'coding transcript variant'),
+            ('TFBS_ablation', 'TFBS ablation'),
+            ('TFBS_amplification', 'TFBS amplification'),
+            ('TF_binding_site_variant', 'TF binding site variant'),
+            ('regulatory_region_ablation', 'regulatory region ablation'),
+            ('regulatory_region_amplification', 'regulatory region amplification'),
+            ('regulatory_region_variant', 'regulatory region variant'),
+            ('intergenic_variant', 'intergenic variant'),
+            ('sequence_variant', 'sequence variant')
         ]
     )
 
     synonyms = forms.CharField(
         label='Synonyms',
-        required=False
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Add HGVS notation, separated by commas"
+            }
+        )
     )
 
     evidence = forms.CharField(
         label='Evidence',
-        required=False
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Add evidence, separated by commas"
+            }
+        )
     )
 
     def clean(self):
@@ -173,6 +237,8 @@ class SingleVariantForm(forms.Form):
         assembly = self.cleaned_data['assembly']
         chromosome = self.cleaned_data['chromosome']
 
+        start = self.cleaned_data['start']
+        end = self.cleaned_data['end']
         strand = self.cleaned_data['strand']
         maf = self.cleaned_data['maf']
         ambiguity = self.cleaned_data['ambiguity']
@@ -211,6 +277,14 @@ class SingleVariantForm(forms.Form):
         if not evidence:
             self.cleaned_data['evidence'] = None
 
+        is_unique = helper.check_single_variant_unique(
+            assembly, chromosome, start, end,
+            ancestral_allele, minor_allele
+        )
+
+        if is_unique != True:
+            raise ValidationError(is_unique)
+
         return self.cleaned_data
 
 
@@ -223,7 +297,6 @@ class UploadForm(forms.Form):
             if line.strip():
                 try:
                     json_data = json.loads(line)
-                    print(json_data)
                     # check if required keys are filled
                     # check if name already exists in collection
                     upload_correct = helper.check_upload_file(json_data)

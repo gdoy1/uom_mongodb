@@ -6,7 +6,7 @@
 <div>
     <div class="row justify-content-center">
         <div class="col-8">
-            <h2 class="mt-2">Bulk Upload</h2>
+            <h2 class="mt-2"><i class="bi-file-earmark-arrow-up"></i>Bulk Upload</h2>
             <hr class="mt-0 mb-4">
             <hr>
             <p><i>Upload variants.json file</i></p>
@@ -20,7 +20,8 @@
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{form}}
-                <button type="submit">Upload</button>
+                <button type="submit" class="btn btn-success">Upload</button>
+                <button type="reset" class="btn btn-secondary">Reset</button>
             </form>
         </div>
     </div>

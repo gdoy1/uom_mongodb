@@ -1,0 +1,40 @@
+{
+  "$jsonSchema": {
+    "required": [
+        "mappings.assembly_name",
+        "mappings.seq_region_name",
+        "mappings.start",
+        "mappings.end",
+        "name",
+        "ancestral_allele",
+        "minor_allele",
+        "source"
+    ],
+    "properties": {
+        "name": {
+            "bsonType": "string"
+        },
+        "mappings.assembly_name": {
+            "bsonType": "string"
+        },
+        "mappings.seq_region_name": {
+            "bsonType": "int"
+        },
+        "mappings.start": {
+            "bsonType": "int"
+        },
+        "mappings.end": {
+            "bsonType": "int"
+        },
+        "ancestral_allele": {
+            "bsonType": "string"
+        },
+        "minor_allele": {
+            "bsonType": "string"
+        },
+        "source": {
+            "bsonType": "string"
+        }
+    }
+    }
+}
